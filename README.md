@@ -116,6 +116,17 @@ python demo.py
 # Opens at http://localhost:7860
 ```
 
+## Trained Models on HuggingFace
+
+Pre-trained model weights are hosted on HuggingFace Hub:
+
+**[Louisnguyen/financial-nlp-stance-sentiment](https://huggingface.co/Louisnguyen/financial-nlp-stance-sentiment)**
+
+Contains:
+- `multitask_finbert/` — Multi-task model (best performance)
+- `finbert_stance/` — FinBERT fine-tuned for stance classification
+- `finbert_sentiment/` — FinBERT fine-tuned for sentiment classification
+
 ## Hardware
 
 - Training was performed on Apple M3 Max (MPS backend)

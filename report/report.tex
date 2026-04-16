@@ -37,6 +37,42 @@
 \maketitle
 
 % ══════════════════════════════════════════════════════════════════════
+%  SCOPE TABLE (required by submission guidelines)
+% ══════════════════════════════════════════════════════════════════════
+
+\begin{table*}[t]
+\centering
+\caption{Project Scope (COMP6713 2026 T1). Minimum 80 credits required; achieved \textbf{135+ credits}.}
+\label{tab:scope}
+\small
+\begin{tabular}{@{}p{3.2cm}p{1.5cm}p{5cm}p{5.5cm}@{}}
+\toprule
+\textbf{Category} & \textbf{Credits} & \textbf{Description} & \textbf{Our Implementation} \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{Part A: Problem Definition} (min. 10 credits) \hfill \textit{Achieved: 20}} \\
+NLP Problem (x2) & 5 each & Stance + Sentiment classification & Hawkish/dovish/neutral + Positive/negative/neutral \\
+Text Domain (x2) & 5 each & Central bank comms + Financial news & FOMC meeting minutes + Financial PhraseBank headlines \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{Part B: Dataset Selection} (min. 20 credits) \hfill \textit{Achieved: 20}} \\
+2 existing datasets & 10 & Publicly available & FOMC Hawkish-Dovish (2,480) + Financial PhraseBank (2,264) \\
+1 existing lexicon & 10 & Domain lexicon & Loughran-McDonald Financial Sentiment Dictionary \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{Part C: Modelling} (min. 30 credits) \hfill \textit{Achieved: 65+}} \\
+Baseline & req. & Simple baseline & TF-IDF + Logistic Regression \\
+Pre-trained models (x3) & 5 each & Compare multiple & FinBERT, BERT-base, RoBERTa-base (zero/few-shot) \\
+Fine-tune a model & 20 & Out-of-box fine-tuning & FinBERT fine-tuned on each dataset \\
+Extend a method & 30 & Novel extension & Multi-task FinBERT (shared encoder + dual heads + weighted CE) \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{Part D: Evaluation} (min. 20 credits) \hfill \textit{Achieved: 30}} \\
+Quantitative eval & 10 & Appropriate metrics & Per-class F1, macro-F1, accuracy, confusion matrices \\
+Qualitative eval & 5 & Error analysis & Misclassification patterns, ambiguous sentence analysis \\
+Command line testing & 5 & CLI interface & \texttt{cli.py} with --text, --file, interactive modes \\
+Demo & 10 & Gradio interface & Web UI with stance + sentiment predictions \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+% ══════════════════════════════════════════════════════════════════════
 %  ABSTRACT
 % ══════════════════════════════════════════════════════════════════════
 \begin{abstract}

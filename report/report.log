@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022 - Spack) (preloaded format=pdflatex 2023.5.19)  16 APR 2026 17:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022 - Spack) (preloaded format=pdflatex 2023.5.19)  16 APR 2026 18:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -692,7 +692,7 @@ yks4jxvs4cg6cddeczjlnf2fhi/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 96.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 48.
 
 
 (/apps/z_install_tree/linux-rocky8-ivybridge/gcc-12.2.0/texlive-20220321-7ejwbh
@@ -703,7 +703,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 yks4jxvs4cg6cddeczjlnf2fhi/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 96.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 48.
 
 
 (/apps/z_install_tree/linux-rocky8-ivybridge/gcc-12.2.0/texlive-20220321-7ejwbh
@@ -714,26 +714,17 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 yks4jxvs4cg6cddeczjlnf2fhi/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-Underfull \hbox (badness 4518) in paragraph at lines 113--121
-[]\T1/ptm/b/n/10 (+20) Financial sen-ti-ment anal-y-sis \T1/ptm/m/n/10 (+20) ha
-s pro-gressed from
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+[]|\T1/ptm/m/n/9 (+20) Hawkish/dovish/neutral + Pos-i-
  []
 
-[1{/apps/z_install_tree/linux-rocky8-ivybridge/gcc-12.2.0/texlive-20220321-7ejw
-bhyks4jxvs4cg6cddeczjlnf2fhi/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}
 
+Underfull \hbox (badness 10000) in paragraph at lines 62--63
+[]|\T1/ptm/m/n/9 (+20) FinBERT, BERT-base, RoBERTa-base
+ []
 
-]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 223.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 223.
-
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 26
-7.
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 69
+.
 
 (/apps/z_install_tree/linux-rocky8-ivybridge/gcc-12.2.0/texlive-20220321-7ejwbh
 yks4jxvs4cg6cddeczjlnf2fhi/texmf-dist/tex/latex/psnfss/t1pcr.fd
@@ -743,44 +734,65 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `pcr' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
+
+Underfull \hbox (badness 4518) in paragraph at lines 149--157
+[]\T1/ptm/b/n/10 (+20) Financial sen-ti-ment anal-y-sis \T1/ptm/m/n/10 (+20) ha
+s pro-gressed from
+ []
+
+[1{/apps/z_install_tree/linux-rocky8-ivybridge/gcc-12.2.0/texlive-20220321-7ejw
+bhyks4jxvs4cg6cddeczjlnf2fhi/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}
+
+
+]
+Underfull \vbox (badness 1552) has occurred while \output is active []
+
  [2]
-Underfull \hbox (badness 10000) in paragraph at lines 303--308
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 259.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 259.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 339--344
 []\T1/ptm/m/n/10 (+20) All trans-former mod-els use the Hug-ging-Face
  []
 
 
-Underfull \hbox (badness 6575) in paragraph at lines 303--308
+Underfull \hbox (badness 6575) in paragraph at lines 339--344
 \T1/pcr/m/n/10 transformers \T1/ptm/m/n/10 (+20) li-brary. Clas-si-cal ML base-
 lines use
  []
 
 [3]
-<../analysis/performance_progression.png, id=212, 996.6033pt x 417.7206pt>
+<../analysis/performance_progression.png, id=213, 996.6033pt x 417.7206pt>
 File: ../analysis/performance_progression.png Graphic file (type png)
 <use ../analysis/performance_progression.png>
 Package pdftex.def Info: ../analysis/performance_progression.png  used on input
- line 442.
+ line 478.
 (pdftex.def)             Requested size: 252.0pt x 105.62181pt.
-<../analysis/domain_pretraining_gap.png, id=214, 998.0487pt x 367.49295pt>
+<../analysis/domain_pretraining_gap.png, id=215, 998.0487pt x 367.49295pt>
 File: ../analysis/domain_pretraining_gap.png Graphic file (type png)
 <use ../analysis/domain_pretraining_gap.png>
 Package pdftex.def Info: ../analysis/domain_pretraining_gap.png  used on input 
-line 451.
+line 487.
 (pdftex.def)             Requested size: 252.0pt x 92.78702pt.
  [4 <../analysis/performance_progression.png> <../analysis/domain_pretraining_g
-ap.png>]
-Underfull \hbox (badness 2277) in paragraph at lines 687--691
+ap.png>] [5]
+Underfull \hbox (badness 2277) in paragraph at lines 723--727
 []\T1/ptm/m/n/10 (+20) D. Araci, ``Fin-BERT: Fi-nan-cial sen-ti-ment anal-y-sis
 
  []
 
 
-Underfull \hbox (badness 2495) in paragraph at lines 687--691
+Underfull \hbox (badness 2495) in paragraph at lines 723--727
 \T1/ptm/m/n/10 (+20) with pre-trained lan-guage mod-els,'' \T1/ptm/m/it/10 (+20
 ) arXiv preprint
  []
 
-[5]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -792,20 +804,18 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[6
-
-] (./report.aux)
+[6] (./report.aux)
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 57A3663D3D85B62219E24B2C63B250DA;7428.
  ) 
 Here is how much of TeX's memory you used:
- 15734 strings out of 478268
- 268950 string characters out of 5805926
- 590785 words of memory out of 5000000
- 33392 multiletter control sequences out of 15000+600000
- 590672 words of font info for 313 fonts, out of 8000000 for 9000
+ 15747 strings out of 478268
+ 269093 string characters out of 5805926
+ 596905 words of memory out of 5000000
+ 33396 multiletter control sequences out of 15000+600000
+ 591619 words of font info for 320 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,10n,63p,1003b,460s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 60i,10n,63p,1003b,413s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/apps/z_install_tree/linux-rocky8-ivybridge/gcc-12.2.0/texlive-20220321-7ejw
 bhyks4jxvs4cg6cddeczjlnf2fhi/texmf-dist/fonts/enc/dvips/base/8r.enc}</apps/z_in
 stall_tree/linux-rocky8-ivybridge/gcc-12.2.0/texlive-20220321-7ejwbhyks4jxvs4cg
@@ -832,10 +842,10 @@ y8-ivybridge/gcc-12.2.0/texlive-20220321-7ejwbhyks4jxvs4cg6cddeczjlnf2fhi/texmf
 -dist/fonts/type1/urw/times/utmr8a.pfb></apps/z_install_tree/linux-rocky8-ivybr
 idge/gcc-12.2.0/texlive-20220321-7ejwbhyks4jxvs4cg6cddeczjlnf2fhi/texmf-dist/fo
 nts/type1/urw/times/utmri8a.pfb>
-Output written on report.pdf (6 pages, 421396 bytes).
+Output written on report.pdf (6 pages, 424564 bytes).
 PDF statistics:
- 311 PDF objects out of 1000 (max. 8388607)
- 272 compressed objects within 3 object streams
- 69 named destinations out of 1000 (max. 500000)
- 50515 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 312 PDF objects out of 1000 (max. 8388607)
+ 273 compressed objects within 3 object streams
+ 70 named destinations out of 1000 (max. 500000)
+ 51027 words of extra memory for PDF output out of 51595 (max. 10000000)
 

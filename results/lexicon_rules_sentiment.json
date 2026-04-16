@@ -1,0 +1,12 @@
+{
+  "model": "LM Lexicon (rule-based)",
+  "task": "sentiment",
+  "accuracy": 0.6932,
+  "macro_f1": 0.5315,
+  "per_class_f1": {
+    "negative": 0.3111,
+    "neutral": 0.8107,
+    "positive": 0.4725
+  },
+  "report": "              precision    recall  f1-score   support\n\n    negative     0.4828    0.2295    0.3111        61\n     neutral     0.7219    0.9245    0.8107       278\n    positive     0.6324    0.3772    0.4725       114\n\n    accuracy                         0.6932       453\n   macro avg     0.6123    0.5104    0.5315       453\nweighted avg     0.6672    0.6932    0.6583       453\n"
+}

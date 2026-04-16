@@ -8,7 +8,8 @@ Executes all experiments in sequence:
   3. Zero-shot and few-shot evaluation of pre-trained models
   4. Fine-tune FinBERT separately on each dataset
   5. Train multi-task model on both datasets simultaneously
-  6. Generate summary comparison table
+  6. Fine-tune BERT-base-uncased with LLRD + Gradual Unfreezing
+  7. Generate summary comparison table
 
 Usage:
     python run_experiments.py              # run everything
@@ -17,6 +18,7 @@ Usage:
     python run_experiments.py --step 3     # pretrained eval only
     python run_experiments.py --step 4     # fine-tuning only
     python run_experiments.py --step 5     # multi-task only
+    python run_experiments.py --step 6     # BERT LLRD fine-tuning only
 """
 
 import argparse
@@ -113,6 +115,27 @@ def step5_multitask(fomc, fpb):
     return results
 
 
+def step6_finetune_bert_llrd(fomc, fpb):
+    """Step 6: BERT-base-uncased with Layer-wise LR Decay + Gradual Unfreezing."""
+    from src.finetune_bert import finetune_bert_llrd
+    print("\n" + "="*70)
+    print("  STEP 6: BERT-base LLRD + GRADUAL UNFREEZING")
+    print("="*70)
+
+    stance_metrics, _, _ = finetune_bert_llrd(
+        fomc["train"], fomc["val"], fomc["test"],
+        STANCE_LABELS, "stance",
+    )
+    sentiment_metrics, _, _ = finetune_bert_llrd(
+        fpb["train"], fpb["val"], fpb["test"],
+        SENTIMENT_LABELS, "sentiment",
+    )
+    return {
+        "bert_llrd_stance": stance_metrics,
+        "bert_llrd_sentiment": sentiment_metrics,
+    }
+
+
 def print_summary(all_results):
     """Print a summary comparison table of all experiment results."""
     print("\n" + "="*70)
@@ -135,7 +158,7 @@ def main():
     parser = argparse.ArgumentParser(description="Run Financial NLP experiments")
     parser.add_argument(
         "--step", type=int, default=0,
-        help="Run a specific step (1-5). 0 = run all steps.",
+        help="Run a specific step (1-6). 0 = run all steps.",
     )
     args = parser.parse_args()
 
@@ -162,6 +185,10 @@ def main():
 
     if args.step == 0 or args.step == 5:
         results = step5_multitask(fomc, fpb)
+        all_results.update(results)
+
+    if args.step == 0 or args.step == 6:
+        results = step6_finetune_bert_llrd(fomc, fpb)
         all_results.update(results)
 
     if all_results:

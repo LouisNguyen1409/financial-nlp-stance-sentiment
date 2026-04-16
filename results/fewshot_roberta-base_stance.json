@@ -1,12 +1,12 @@
 {
   "model": "roberta-base (few-shot k=16)",
   "task": "stance",
-  "accuracy": 0.373,
-  "macro_f1": 0.36,
+  "accuracy": 0.3589,
+  "macro_f1": 0.3489,
   "per_class_f1": {
-    "dovish": 0.2963,
-    "hawkish": 0.3247,
-    "neutral": 0.4589
+    "dovish": 0.296,
+    "hawkish": 0.3182,
+    "neutral": 0.4324
   },
-  "report": "              precision    recall  f1-score   support\n\n      dovish     0.2857    0.3077    0.2963       130\n     hawkish     0.2674    0.4132    0.3247       121\n     neutral     0.5621    0.3878    0.4589       245\n\n    accuracy                         0.3730       496\n   macro avg     0.3717    0.3696    0.3600       496\nweighted avg     0.4178    0.3730    0.3836       496\n"
+  "report": "              precision    recall  f1-score   support\n\n      dovish     0.2789    0.3154    0.2960       130\n     hawkish     0.2620    0.4050    0.3182       121\n     neutral     0.5432    0.3592    0.4324       245\n\n    accuracy                         0.3589       496\n   macro avg     0.3614    0.3598    0.3489       496\nweighted avg     0.4053    0.3589    0.3688       496\n"
 }

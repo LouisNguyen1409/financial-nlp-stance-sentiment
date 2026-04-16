@@ -1,12 +1,12 @@
 {
   "model": "BERT-base LLRD + Gradual Unfreezing",
   "task": "stance",
-  "accuracy": 0.6431,
-  "macro_f1": 0.6386,
+  "accuracy": 0.6512,
+  "macro_f1": 0.6371,
   "per_class_f1": {
-    "dovish": 0.619,
-    "hawkish": 0.6169,
-    "neutral": 0.6799
+    "dovish": 0.5887,
+    "hawkish": 0.6,
+    "neutral": 0.7227
   },
-  "report": "              precision    recall  f1-score   support\n\n      dovish     0.5549    0.7000    0.6190       130\n     hawkish     0.5230    0.7521    0.6169       121\n     neutral     0.8671    0.5592    0.6799       245\n\n    accuracy                         0.6431       496\n   macro avg     0.6483    0.6704    0.6386       496\nweighted avg     0.7013    0.6431    0.6486       496\n"
+  "report": "              precision    recall  f1-score   support\n\n      dovish     0.5461    0.6385    0.5887       130\n     hawkish     0.5436    0.6694    0.6000       121\n     neutral     0.8154    0.6490    0.7227       245\n\n    accuracy                         0.6512       496\n   macro avg     0.6350    0.6523    0.6371       496\nweighted avg     0.6785    0.6512    0.6576       496\n"
 }

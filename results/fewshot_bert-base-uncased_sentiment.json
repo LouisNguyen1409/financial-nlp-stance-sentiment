@@ -1,12 +1,12 @@
 {
   "model": "bert-base-uncased (few-shot k=16)",
   "task": "sentiment",
-  "accuracy": 0.7417,
-  "macro_f1": 0.65,
+  "accuracy": 0.7461,
+  "macro_f1": 0.6599,
   "per_class_f1": {
-    "negative": 0.5231,
-    "neutral": 0.8633,
-    "positive": 0.5636
+    "negative": 0.5397,
+    "neutral": 0.8597,
+    "positive": 0.5804
   },
-  "report": "              precision    recall  f1-score   support\n\n    negative     0.4928    0.5574    0.5231        61\n     neutral     0.8633    0.8633    0.8633       278\n    positive     0.5849    0.5439    0.5636       114\n\n    accuracy                         0.7417       453\n   macro avg     0.6470    0.6548    0.6500       453\nweighted avg     0.7433    0.7417    0.7421       453\n"
+  "report": "              precision    recall  f1-score   support\n\n    negative     0.5231    0.5574    0.5397        61\n     neutral     0.8597    0.8597    0.8597       278\n    positive     0.5909    0.5702    0.5804       114\n\n    accuracy                         0.7461       453\n   macro avg     0.6579    0.6624    0.6599       453\nweighted avg     0.7467    0.7461    0.7463       453\n"
 }

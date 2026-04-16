@@ -1,12 +1,12 @@
 {
   "model": "BERT-base LLRD + Gradual Unfreezing",
   "task": "sentiment",
-  "accuracy": 0.9669,
-  "macro_f1": 0.9475,
+  "accuracy": 0.9691,
+  "macro_f1": 0.9533,
   "per_class_f1": {
-    "negative": 0.9076,
-    "neutral": 0.9875,
-    "positive": 0.9474
+    "negative": 0.928,
+    "neutral": 0.9892,
+    "positive": 0.9427
   },
-  "report": "              precision    recall  f1-score   support\n\n    negative     0.9310    0.8852    0.9076        61\n     neutral     0.9822    0.9928    0.9875       278\n    positive     0.9474    0.9474    0.9474       114\n\n    accuracy                         0.9669       453\n   macro avg     0.9535    0.9418    0.9475       453\nweighted avg     0.9665    0.9669    0.9666       453\n"
+  "report": "              precision    recall  f1-score   support\n\n    negative     0.9062    0.9508    0.9280        61\n     neutral     0.9928    0.9856    0.9892       278\n    positive     0.9469    0.9386    0.9427       114\n\n    accuracy                         0.9691       453\n   macro avg     0.9486    0.9583    0.9533       453\nweighted avg     0.9696    0.9691    0.9692       453\n"
 }

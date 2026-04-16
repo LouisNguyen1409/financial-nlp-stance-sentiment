@@ -1,12 +1,12 @@
 {
   "model": "Multi-task FinBERT",
   "task": "sentiment",
-  "accuracy": 0.9801,
-  "macro_f1": 0.9666,
+  "accuracy": 0.9845,
+  "macro_f1": 0.9772,
   "per_class_f1": {
-    "negative": 0.9431,
-    "neutral": 0.9964,
-    "positive": 0.9604
+    "negative": 0.9677,
+    "neutral": 0.9946,
+    "positive": 0.9692
   },
-  "report": "              precision    recall  f1-score   support\n\n    negative     0.9355    0.9508    0.9431        61\n     neutral     0.9964    0.9964    0.9964       278\n    positive     0.9646    0.9561    0.9604       114\n\n    accuracy                         0.9801       453\n   macro avg     0.9655    0.9678    0.9666       453\nweighted avg     0.9802    0.9801    0.9802       453\n"
+  "report": "              precision    recall  f1-score   support\n\n    negative     0.9524    0.9836    0.9677        61\n     neutral     0.9964    0.9928    0.9946       278\n    positive     0.9735    0.9649    0.9692       114\n\n    accuracy                         0.9845       453\n   macro avg     0.9741    0.9804    0.9772       453\nweighted avg     0.9847    0.9845    0.9846       453\n"
 }

@@ -2,11 +2,11 @@
   "model": "FinBERT (fine-tuned)",
   "task": "sentiment",
   "accuracy": 0.9669,
-  "macro_f1": 0.9459,
+  "macro_f1": 0.9467,
   "per_class_f1": {
-    "negative": 0.8983,
+    "negative": 0.9016,
     "neutral": 0.9875,
-    "positive": 0.952
+    "positive": 0.9511
   },
-  "report": "              precision    recall  f1-score   support\n\n    negative     0.9298    0.8689    0.8983        61\n     neutral     0.9822    0.9928    0.9875       278\n    positive     0.9478    0.9561    0.9520       114\n\n    accuracy                         0.9669       453\n   macro avg     0.9533    0.9393    0.9459       453\nweighted avg     0.9665    0.9669    0.9665       453\n"
+  "report": "              precision    recall  f1-score   support\n\n    negative     0.9016    0.9016    0.9016        61\n     neutral     0.9822    0.9928    0.9875       278\n    positive     0.9640    0.9386    0.9511       114\n\n    accuracy                         0.9669       453\n   macro avg     0.9493    0.9443    0.9467       453\nweighted avg     0.9668    0.9669    0.9668       453\n"
 }

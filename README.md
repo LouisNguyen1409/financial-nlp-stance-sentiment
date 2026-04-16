@@ -52,6 +52,7 @@ python run_experiments.py --step 2   # Baseline (TF-IDF + LR)
 python run_experiments.py --step 3   # Pre-trained model evaluation
 python run_experiments.py --step 4   # FinBERT fine-tuning
 python run_experiments.py --step 5   # Multi-task training
+python run_experiments.py --step 6   # BERT fine-tuning 
 ```
 
 ## Datasets & Lexicon

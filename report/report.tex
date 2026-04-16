@@ -28,14 +28,49 @@
        of Central Bank Communications and News Headlines}
 
 \author{
-    \IEEEauthorblockN{COMP6713 Natural Language Processing -- Group Project}
-    \IEEEauthorblockA{School of Computer Science and Engineering\\
-    University of New South Wales\\
-    Sydney, Australia}
+    \IEEEauthorblockN{Louis Nguyen (z5428797) \quad Quoc Dat Bui (z5404752) \quad Nam Khanh Tran (z5577208) \quad Quang Minh Phan (z5531827)}
+    \IEEEauthorblockA{COMP6713 Natural Language Processing -- 2026 T1\\
+    School of Computer Science and Engineering, University of New South Wales}
 }
 
 \begin{document}
 \maketitle
+
+% ══════════════════════════════════════════════════════════════════════
+%  SCOPE TABLE (required by submission guidelines)
+% ══════════════════════════════════════════════════════════════════════
+
+\begin{table*}[t]
+\centering
+\caption{Project Scope (COMP6713 2026 T1). Minimum 80 credits required; achieved \textbf{135+ credits}.}
+\label{tab:scope}
+\small
+\begin{tabular}{@{}p{3.2cm}p{1.5cm}p{5cm}p{5.5cm}@{}}
+\toprule
+\textbf{Category} & \textbf{Credits} & \textbf{Description} & \textbf{Our Implementation} \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{Part A: Problem Definition} (min. 10 credits) \hfill \textit{Achieved: 20}} \\
+NLP Problem (x2) & 5 each & Stance + Sentiment classification & Hawkish/dovish/neutral + Positive/negative/neutral \\
+Text Domain (x2) & 5 each & Central bank comms + Financial news & FOMC meeting minutes + Financial PhraseBank headlines \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{Part B: Dataset Selection} (min. 20 credits) \hfill \textit{Achieved: 20}} \\
+2 existing datasets & 10 & Publicly available & FOMC Hawkish-Dovish (2,480) + Financial PhraseBank (2,264) \\
+1 existing lexicon & 10 & Domain lexicon & Loughran-McDonald Financial Sentiment Dictionary \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{Part C: Modelling} (min. 30 credits) \hfill \textit{Achieved: 65+}} \\
+Baseline & req. & Simple baseline & TF-IDF + Logistic Regression \\
+Pre-trained models (x3) & 5 each & Compare multiple & FinBERT, BERT-base, RoBERTa-base (zero/few-shot) \\
+Fine-tune a model & 20 & Out-of-box fine-tuning & FinBERT fine-tuned on each dataset \\
+Extend a method & 30 & Novel extension & Multi-task FinBERT (shared encoder + dual heads + weighted CE) \\
+\midrule
+\multicolumn{4}{@{}l}{\textbf{Part D: Evaluation} (min. 20 credits) \hfill \textit{Achieved: 30}} \\
+Quantitative eval & 10 & Appropriate metrics & Per-class F1, macro-F1, accuracy, confusion matrices \\
+Qualitative eval & 5 & Error analysis & Misclassification patterns, ambiguous sentence analysis \\
+Command line testing & 5 & CLI interface & \texttt{cli.py} with --text, --file, interactive modes \\
+Demo & 10 & Gradio interface & Web UI with stance + sentiment predictions \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 % ══════════════════════════════════════════════════════════════════════
 %  ABSTRACT
@@ -43,9 +78,9 @@
 \begin{abstract}
 Financial markets react rapidly to both central bank policy signals and
 news sentiment.  In this project we tackle two closely related
-text-classification tasks: (1) \emph{stance classification}---labelling
+text-classification tasks: (1) \emph{stance classification}, labelling
 sentences from Federal Open Market Committee (FOMC) communications as
-hawkish, dovish, or neutral---and (2) \emph{sentiment classification}---labelling
+hawkish, dovish, or neutral; and (2) \emph{sentiment classification}, labelling
 financial news headlines as positive, negative, or neutral.  We
 systematically compare traditional machine-learning baselines (TF-IDF,
 GloVe, lexicon rule-based), zero-shot and few-shot pre-trained
@@ -53,7 +88,7 @@ transformers, single-task fine-tuning, and a multi-task learning
 architecture.  Our best system, a \textbf{multi-task FinBERT} model with
 a shared encoder and dual task-specific heads, achieves 98.45\% accuracy
 / 0.9772 macro-F1 on sentiment and 67.74\% accuracy / 0.6684 macro-F1
-on stance---outperforming all single-task alternatives.  We provide
+on stance, outperforming all single-task alternatives.  We provide
 quantitative evaluation, per-class analysis, error diagnostics, and a
 Gradio demonstration interface.
 \end{abstract}
@@ -64,7 +99,7 @@ Gradio demonstration interface.
 % ══════════════════════════════════════════════════════════════════════
 
 Central banks such as the U.S.\ Federal Reserve wield enormous influence
-over global financial markets---not only through their policy actions,
+over global financial markets, not only through their policy actions,
 but increasingly through the language they use to communicate those
 actions.  A single hawkish or dovish sentence in an FOMC statement can
 shift bond yields within seconds.  Likewise, the sentiment embedded in
@@ -124,7 +159,7 @@ which achieve strong zero-shot sentiment performance.
 Shah et al.\ \cite{shah2023trillion} released the FOMC
 Hawkish-Dovish dataset and showed that domain-adapted transformers
 outperform general-purpose models.  The key challenge is that hawkish
-and dovish language is often subtle and context-dependent---phrases such
+and dovish language is often subtle and context-dependent. Phrases such
 as ``sustained progress toward our goals'' can be neutral or dovish
 depending on context.
 
@@ -263,8 +298,8 @@ language, so a shared encoder should benefit from complementary
 training signals.
 
 \textbf{Architecture.}  The model consists of a shared FinBERT encoder
-followed by two independent classification heads---one for stance and
-one for sentiment.  Each head is a two-layer feedforward network with
+followed by two independent classification heads (one for stance and
+one for sentiment).  Each head is a two-layer feedforward network with
 dropout, taking the \texttt{[CLS]} token representation as input.
 
 \textbf{Training procedure.}  We use alternating mini-batches: each
@@ -387,7 +422,77 @@ BERT-base LLRD               & 0.6512 & 0.6371 \\
 \end{table}
 
 % ══════════════════════════════════════════════════════════════════════
-\section{Analysis}
+\section{Data Analysis}
+\label{sec:data-analysis}
+% ══════════════════════════════════════════════════════════════════════
+
+Before examining model performance, we conduct a thorough analysis of
+the datasets to understand their characteristics and challenges.
+
+\subsection{Class Distribution}
+
+The FOMC dataset exhibits notable class imbalance: \textbf{49.4\%} of
+sentences are neutral, with hawkish (24.4\%) and dovish (26.2\%)
+forming smaller portions.  The Financial PhraseBank shows a similar
+pattern with neutral dominating at 61.4\%, followed by positive (25.2\%)
+and negative (13.4\%).  This imbalance motivates our use of weighted
+cross-entropy loss during training.
+
+\subsection{Text Length Characteristics}
+
+FOMC sentences are notably longer (mean 30.3 words, max 181) compared
+to Financial PhraseBank headlines (mean 22.5 words, max 81).  The
+greater length and complexity of FOMC text partly explains the higher
+difficulty of stance classification, as the model must integrate
+information across longer spans to determine policy stance.
+
+\subsection{Lexicon Coverage Analysis}
+
+We analyse the overlap between the Loughran-McDonald lexicon and each
+class.  A key finding is that \textbf{hawkish-category words appear
+frequently in neutral FOMC sentences}, not just in hawkish ones.  This
+overlap explains why rule-based lexicon classifiers perform poorly on
+stance (41.5\% accuracy): the presence of ``inflation'' or ``risk'' does
+not reliably indicate a hawkish stance without broader context.
+
+For sentiment, lexicon coverage aligns better with class labels:
+positive words concentrate in positive sentences and negative words in
+negative sentences, explaining the stronger (though still limited)
+lexicon baseline performance on sentiment (69.3\%).
+
+\subsection{Discriminative Features}
+
+TF-IDF analysis reveals the most discriminative words per class.  For
+stance, hawkish sentences feature terms like ``inflation'',
+``tightening'', and ``elevated'', while dovish sentences contain
+``accommodation'', ``stimulus'', and ``subdued''.  Critically, many
+discriminative terms for stance are domain-specific and absent from
+general-purpose models' pre-training data, highlighting the value of
+FinBERT's financial pre-training.
+
+For sentiment, discriminative features are more intuitive: ``profit'',
+``growth'' for positive; ``loss'', ``decline'' for negative.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\columnwidth]{../analysis/performance_progression.png}
+    \caption{Performance progression from baselines through multi-task
+    learning.  The gap between sentiment (blue) and stance (red) persists
+    across all model families.}
+    \label{fig:progression}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\columnwidth]{../analysis/domain_pretraining_gap.png}
+    \caption{Few-shot (k=16) comparison showing the advantage of
+    domain-specific pre-training.  FinBERT dramatically outperforms
+    BERT-base and RoBERTa on sentiment.}
+    \label{fig:domain-gap}
+\end{figure}
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Analysis of Results}
 \label{sec:analysis}
 % ══════════════════════════════════════════════════════════════════════
 
@@ -404,8 +509,8 @@ words like ``profit'', ``growth'', and ``loss'' carry clear sentiment
 signals.  Monetary-policy stance, by contrast, involves interpreting
 domain-specific nuance.  A sentence such as ``\emph{The Committee
 judges that the risks to the economic outlook are roughly balanced}''
-is neutral, but a subtle rewording---``\emph{The Committee judges that
-the risks are weighted to the upside}''---becomes hawkish.  This kind
+is neutral, but a subtle rewording (``\emph{The Committee judges that
+the risks are weighted to the upside}'') becomes hawkish.  This kind
 of fine-grained distinction is difficult even for human annotators.
 
 \subsection{The Value of Domain-Specific Pre-Training}
@@ -414,7 +519,7 @@ FinBERT's performance in zero-shot and few-shot settings is remarkable.
 With \emph{zero} task-specific training, FinBERT achieves 97.35\%
 accuracy on sentiment, outperforming every traditional baseline.  In
 the few-shot setting ($k{=}16$), FinBERT achieves 98.01\% on sentiment
-versus 74.61\% for BERT-base and 75.72\% for RoBERTa---a gap of over
+versus 74.61\% for BERT-base and 75.72\% for RoBERTa, a gap of over
 20 percentage points.
 
 This demonstrates that domain-specific pre-training on financial corpora
@@ -441,13 +546,16 @@ simultaneously:
 
 The improvement is larger on stance, suggesting that sentiment
 supervision provides useful inductive bias for the harder task.
+Figure~\ref{fig:progression} illustrates this progression across all
+modelling stages, while Figure~\ref{fig:domain-gap} quantifies the
+domain pre-training advantage in the few-shot setting.
 Intuitively, understanding whether financial language is positive or
 negative helps disambiguate hawkish and dovish signals.
 
 \subsection{BERT-base LLRD: Closing the Gap Without Domain Pre-Training}
 
 An interesting finding is that BERT-base with LLRD and gradual
-unfreezing achieves 65.12\% accuracy on stance---surpassing
+unfreezing achieves 65.12\% accuracy on stance, surpassing
 FinBERT's single-task fine-tuned result of 61.29\%.  This shows that
 careful training strategies (layer-wise learning rate decay, gradual
 unfreezing, label smoothing) can compensate for the lack of
@@ -462,7 +570,7 @@ Among traditional methods, TF-IDF + SVM is the strongest, achieving
 non-linear boundaries in high-dimensional TF-IDF space gives it a
 consistent edge over logistic regression.  Extending to trigrams provides
 marginal improvement, while adding Loughran-McDonald lexicon features
-actually \emph{hurts} TF-IDF performance---likely because the lexicon
+actually \emph{hurts} TF-IDF performance, likely because the lexicon
 introduces noise when its categories do not align perfectly with the
 task labels.
 

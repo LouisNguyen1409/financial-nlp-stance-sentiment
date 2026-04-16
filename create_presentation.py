@@ -224,7 +224,7 @@ def build():
                 font_size=22, bold=False, color=LIGHT_BLUE, alignment=PP_ALIGN.CENTER)
     add_rect(sl, Inches(1.5), Inches(4.55), Inches(10.3), Inches(0.04), ACCENT_GOLD)
     add_textbox(sl, Inches(1.5), Inches(4.85), Inches(10.3), Inches(0.8),
-                "Member A (zID) | Member B (zID) | Member C (zID) | Member D (zID)",
+                "Louis Nguyen (z5428797) | Quoc Dat Bui (z5404752) | Nam Khanh Tran (z5577208) | Quang Minh Phan (z5531827)",
                 font_size=16, bold=False, color=RGBColor(0xAA, 0xBB, 0xCC),
                 alignment=PP_ALIGN.CENTER)
 
@@ -302,6 +302,46 @@ def build():
         "Evaluation: macro-F1 as primary metric (handles imbalance)",
         "Accuracy reported for comparability with prior work",
     ], font_size=14, color=BLACK)
+
+    # ════════════════════════════════════════════════════════════════════════
+    # SLIDE 3b — Data Analysis
+    # ════════════════════════════════════════════════════════════════════════
+    sl = prs.slides.add_slide(blank_layout)
+    slide_header(sl, "Data Analysis")
+
+    analysis_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "analysis")
+
+    # Add class distribution image
+    img_path = os.path.join(analysis_dir, "class_distribution.png")
+    if os.path.exists(img_path):
+        sl.shapes.add_picture(img_path, Inches(0.3), Inches(1.5), width=Inches(6.2))
+
+    # Add text length image
+    img_path2 = os.path.join(analysis_dir, "text_length_distribution.png")
+    if os.path.exists(img_path2):
+        sl.shapes.add_picture(img_path2, Inches(6.8), Inches(1.5), width=Inches(6.2))
+
+    add_bullet_slide(sl, Inches(0.5), Inches(5.3), Inches(12), Inches(2), [
+        "FOMC: 49.4% neutral (imbalanced) -> weighted cross-entropy needed",
+        "FOMC sentences longer (avg 30 words) vs FPB (avg 22 words) -> harder context integration",
+        "Hawkish words overlap with neutral class -> lexicon rules fail (41.5% accuracy)",
+    ], font_size=13, color=BLACK)
+
+    # ════════════════════════════════════════════════════════════════════════
+    # SLIDE 3c — Data Analysis: Key Visualizations
+    # ════════════════════════════════════════════════════════════════════════
+    sl = prs.slides.add_slide(blank_layout)
+    slide_header(sl, "Data Analysis: Model Performance Overview")
+
+    # Performance progression
+    img_path3 = os.path.join(analysis_dir, "performance_progression.png")
+    if os.path.exists(img_path3):
+        sl.shapes.add_picture(img_path3, Inches(0.3), Inches(1.5), width=Inches(12.7), height=Inches(4.5))
+
+    add_bullet_slide(sl, Inches(0.5), Inches(6.2), Inches(12), Inches(1), [
+        "Clear monotonic improvement: Baselines -> Pre-trained -> Fine-tuned -> Multi-task",
+        "Sentiment-Stance gap persists across all model families (fundamental task difficulty difference)",
+    ], font_size=13, color=BLACK)
 
     # ════════════════════════════════════════════════════════════════════════
     # SLIDE 4 — Modelling Pipeline Overview

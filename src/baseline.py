@@ -1,19 +1,20 @@
 """
-Baseline model: TF-IDF + Logistic Regression.
+Baseline models for Financial NLP tasks.
 
-This is a simple, non-neural baseline applied to both tasks:
-  1. Stance classification  (hawkish / dovish / neutral)
-  2. Sentiment classification (positive / neutral / negative)
+Implements two non-neural baselines:
+  1. TF-IDF (bigrams) + Logistic Regression  (original baseline)
+  2. TF-IDF (bigrams) + SVM (LinearSVC)      (best alternative for both tasks)
 
-The pipeline uses TF-IDF to convert text into numeric feature vectors,
-then trains a Logistic Regression classifier.
+All models are trained and evaluated on both tasks:
+  - Stance classification  (hawkish / dovish / neutral)
+  - Sentiment classification (positive / neutral / negative)
 """
 
 import os
 import sys
-import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import LinearSVC
 from sklearn.pipeline import Pipeline
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -26,20 +27,14 @@ from src.evaluate import (
 )
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# Original baseline: TF-IDF + Logistic Regression
+# ──────────────────────────────────────────────────────────────────────────────
+
+
 def build_baseline_pipeline():
-    """
-    Build a TF-IDF + Logistic Regression pipeline.
-
-    TF-IDF settings:
-      - Up to bigrams (ngram_range=(1,2)) to capture short phrases
-      - Max 50 000 features to keep memory manageable
-      - Sub-linear TF scaling (log normalisation)
-
-    Logistic Regression:
-      - max_iter=1000 to ensure convergence
-      - class_weight='balanced' to handle class imbalance
-    """
-    pipeline = Pipeline([
+    """TF-IDF (bigrams) + Logistic Regression — original baseline."""
+    return Pipeline([
         ("tfidf", TfidfVectorizer(
             max_features=50_000,
             ngram_range=(1, 2),
@@ -53,7 +48,6 @@ def build_baseline_pipeline():
             solver="lbfgs",
         )),
     ])
-    return pipeline
 
 
 def train_and_evaluate_baseline(train_split, test_split, label_names, task_name):
@@ -67,24 +61,21 @@ def train_and_evaluate_baseline(train_split, test_split, label_names, task_name)
         task_name:   'stance' or 'sentiment' (for logging / file names)
 
     Returns:
-        dict of evaluation metrics
+        (metrics_dict, fitted_pipeline)
     """
     print(f"\n{'='*60}")
     print(f"  BASELINE (TF-IDF + Logistic Regression) — {task_name}")
     print(f"{'='*60}")
 
-    # Extract text and labels
     train_texts = train_split["text"]
     train_labels = train_split["label"]
     test_texts = test_split["text"]
     test_labels = test_split["label"]
 
-    # Build, train, predict
     pipeline = build_baseline_pipeline()
     pipeline.fit(train_texts, train_labels)
     predictions = pipeline.predict(test_texts)
 
-    # Evaluate
     metrics = compute_metrics(test_labels, predictions, label_names)
     print_classification_report(metrics, "TF-IDF + LR", task_name)
     plot_confusion_matrix(
@@ -95,3 +86,114 @@ def train_and_evaluate_baseline(train_split, test_split, label_names, task_name)
         f"baseline_{task_name}.json",
     )
     return metrics, pipeline
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Best alternative: TF-IDF + SVM (LinearSVC)
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+def build_tfidf_svm_pipeline():
+    """TF-IDF (bigrams) + Linear SVM — best alternative for stance."""
+    return Pipeline([
+        ("tfidf", TfidfVectorizer(
+            max_features=50_000,
+            ngram_range=(1, 2),
+            sublinear_tf=True,
+            strip_accents="unicode",
+        )),
+        ("clf", LinearSVC(
+            max_iter=2000,
+            class_weight="balanced",
+            random_state=SEED,
+            C=1.0,
+        )),
+    ])
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Best alternative for sentiment: TF-IDF (trigrams) + Logistic Regression
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+def build_tfidf_trigram_lr_pipeline():
+    """TF-IDF with uni/bi/trigrams + Logistic Regression — best alternative for sentiment."""
+    return Pipeline([
+        ("tfidf", TfidfVectorizer(
+            max_features=80_000,
+            ngram_range=(1, 3),
+            sublinear_tf=True,
+            strip_accents="unicode",
+            min_df=2,
+        )),
+        ("clf", LogisticRegression(
+            max_iter=1000,
+            class_weight="balanced",
+            random_state=SEED,
+            solver="lbfgs",
+            C=1.0,
+        )),
+    ])
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Run alternative baseline experiments
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+def _run_and_eval(pipeline, splits, label_names, task_name, model_name, file_prefix):
+    """Train a single pipeline on one task, evaluate, and return metrics."""
+    print(f"\n{'='*60}")
+    print(f"  {model_name} — {task_name}")
+    print(f"{'='*60}")
+
+    train_texts = splits["train"]["text"]
+    train_labels = splits["train"]["label"]
+    test_texts = splits["test"]["text"]
+    test_labels = splits["test"]["label"]
+
+    pipeline.fit(train_texts, train_labels)
+    predictions = pipeline.predict(test_texts)
+
+    metrics = compute_metrics(test_labels, predictions, label_names)
+    print_classification_report(metrics, model_name, task_name)
+    plot_confusion_matrix(
+        test_labels, predictions, label_names,
+        model_name.replace(" ", "_").replace("+", ""), task_name,
+    )
+    save_results(
+        {"model": model_name, "task": task_name, **metrics},
+        f"{file_prefix}_{task_name}.json",
+    )
+    return metrics
+
+
+def run_alternative_baselines(fomc_splits, fpb_splits):
+    """
+    Run the two best alternative baselines on both datasets:
+      - TF-IDF + SVM        (best for stance)
+      - TF-IDF (trigrams) + LR  (best for sentiment)
+
+    Each model is evaluated on both tasks for comparison.
+    Returns a dict of {experiment_key: metrics_dict}.
+    """
+    from config import STANCE_LABELS, SENTIMENT_LABELS
+
+    results = {}
+
+    experiments = [
+        ("TF-IDF + SVM", "tfidf_svm", build_tfidf_svm_pipeline),
+        ("TF-IDF (trigrams) + LR", "tfidf_trigram_lr", build_tfidf_trigram_lr_pipeline),
+    ]
+
+    for model_name, file_prefix, build_fn in experiments:
+        for splits, label_names, task_name in [
+            (fomc_splits, STANCE_LABELS, "stance"),
+            (fpb_splits, SENTIMENT_LABELS, "sentiment"),
+        ]:
+            key = f"{file_prefix}_{task_name}"
+            results[key] = _run_and_eval(
+                build_fn(), splits, label_names, task_name, model_name, file_prefix,
+            )
+
+    return results

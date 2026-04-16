@@ -2,11 +2,11 @@
 Single-task fine-tuning of FinBERT.
 
 Fine-tunes FinBERT (ProsusAI/finbert) separately on each dataset:
-  1. FOMC  → stance classification  (hawkish / dovish / neutral)
-  2. FPB   → sentiment classification (positive / neutral / negative)
+  1. FOMC -> stance classification  (hawkish / dovish / neutral)
+  2. FPB -> sentiment classification (positive / neutral / negative)
 
 Each model gets a fresh task-specific classification head on top of
-the pre-trained FinBERT encoder.  Training uses AdamW with linear
+the pre-trained FinBERT encoder. Training uses AdamW with linear
 warm-up and optional weighted cross-entropy for class imbalance.
 """
 

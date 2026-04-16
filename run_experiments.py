@@ -89,7 +89,7 @@ def step3_pretrained(fomc, fpb):
 
 def step4_finetune(fomc, fpb):
     """Step 4: Fine-tune FinBERT on each dataset separately."""
-    from src.finetune import finetune_finbert
+    from src.finetune_fineBert import finetune_finbert
     print("\n" + "="*70)
     print("  STEP 4: SINGLE-TASK FINE-TUNING")
     print("="*70)

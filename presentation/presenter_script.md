@@ -8,7 +8,7 @@
 
 ## SLIDE 1: Title Slide (~30 seconds)
 
-> Good morning/afternoon. Our project is **Financial NLP: Stance and Sentiment Classification**. We tackle two core text classification problems in the financial domain, comparing a progression of approaches from simple baselines all the way to multi-task transformer models.
+> Good morning/afternoon. We are Louis Nguyen, Quoc Dat Bui, Nam Khanh Tran, and Quang Minh Phan. Our project is **Financial NLP: Stance and Sentiment Classification**. We tackle two core text classification problems in the financial domain, comparing a progression of approaches from simple baselines all the way to multi-task transformer models.
 
 ---
 
@@ -40,7 +40,29 @@
 
 ---
 
-## SLIDE 4: Modelling Pipeline Overview (~1 minute)
+## SLIDE 4: Data Analysis (~1.5 minutes)
+
+> Before diving into models, let's examine the data.
+>
+> The class distribution charts show a critical challenge: the FOMC dataset is **imbalanced with 49.4% neutral sentences**. This motivated our weighted cross-entropy loss. Financial PhraseBank is also neutral-dominant at 61.4%.
+>
+> FOMC sentences are notably **longer** (average 30 words vs 22 for FPB), meaning models must integrate information across longer spans to determine policy stance.
+>
+> Our lexicon coverage analysis reveals a key finding: **hawkish words frequently appear in neutral FOMC sentences**, not just hawkish ones. This overlap explains why rule-based approaches fail at stance classification.
+
+---
+
+## SLIDE 5: Performance Progression (~1 minute)
+
+> This progression chart tells the whole story at a glance.
+>
+> Both tasks improve monotonically from baselines through multi-task learning. But the **gap between sentiment and stance persists across every model family**. This is a fundamental task difficulty difference, not a modelling failure.
+>
+> The steepest jumps occur at two points: moving from baselines to pre-trained models (especially for sentiment), and moving from few-shot to fine-tuning (especially for stance).
+
+---
+
+## SLIDE 6: Modelling Pipeline Overview (~1 minute)
 
 > Our experimental pipeline follows a progression of increasing complexity.
 >

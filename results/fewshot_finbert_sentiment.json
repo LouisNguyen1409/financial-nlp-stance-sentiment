@@ -1,0 +1,12 @@
+{
+  "model": "finbert (few-shot k=16)",
+  "task": "sentiment",
+  "accuracy": 0.9779,
+  "macro_f1": 0.967,
+  "per_class_f1": {
+    "negative": 0.9524,
+    "neutral": 0.9928,
+    "positive": 0.9558
+  },
+  "report": "              precision    recall  f1-score   support\n\n    negative     0.9231    0.9836    0.9524        61\n     neutral     0.9964    0.9892    0.9928       278\n    positive     0.9643    0.9474    0.9558       114\n\n    accuracy                         0.9779       453\n   macro avg     0.9612    0.9734    0.9670       453\nweighted avg     0.9784    0.9779    0.9780       453\n"
+}

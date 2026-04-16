@@ -45,7 +45,7 @@ def step1_load_data():
 
 def step2_baseline(fomc, fpb):
     """Step 2: TF-IDF + Logistic Regression baseline on both tasks."""
-    from src.baseline import train_and_evaluate_baseline
+    from src.baseline import train_and_evaluate_baseline, run_alternative_baselines
     print("\n" + "="*70)
     print("  STEP 2: BASELINE (TF-IDF + Logistic Regression)")
     print("="*70)
@@ -56,7 +56,17 @@ def step2_baseline(fomc, fpb):
     sentiment_metrics, _ = train_and_evaluate_baseline(
         fpb["train"], fpb["test"], SENTIMENT_LABELS, "sentiment"
     )
-    return {"baseline_stance": stance_metrics, "baseline_sentiment": sentiment_metrics}
+
+    print("\n" + "="*70)
+    print("  STEP 2: ALTERNATIVE BASELINES")
+    print("="*70)
+    alt_results = run_alternative_baselines(fomc, fpb)
+
+    return {
+        "baseline_stance": stance_metrics,
+        "baseline_sentiment": sentiment_metrics,
+        **alt_results,
+    }
 
 
 def step2b_lexicon(fomc, fpb):
@@ -79,7 +89,7 @@ def step3_pretrained(fomc, fpb):
 
 def step4_finetune(fomc, fpb):
     """Step 4: Fine-tune FinBERT on each dataset separately."""
-    from src.finetune import finetune_finbert
+    from src.finetune_fineBert import finetune_finbert
     print("\n" + "="*70)
     print("  STEP 4: SINGLE-TASK FINE-TUNING")
     print("="*70)

@@ -1,0 +1,39 @@
+#!/bin/bash
+#PBS -N financial_nlp_train
+#PBS -l select=1:ncpus=8:mem=48gb:ngpus=1
+#PBS -l walltime=2:00:00
+#PBS -M ndmn004@gmail.com
+#PBS -m ae
+#PBS -j oe
+#PBS -o /srv/scratch/z5428797/NLP/financial-nlp-stance-sentiment/logs/train_all.log
+
+cd /srv/scratch/z5428797/NLP/financial-nlp-stance-sentiment
+mkdir -p logs
+
+module load cuda/12.1.1
+
+source /srv/scratch/z5428797/miniconda3/etc/profile.d/conda.sh
+conda activate financial-nlp
+
+export HF_TOKEN="${HF_TOKEN}"
+export HF_HOME="/srv/scratch/z5428797/.cache/huggingface"
+export TRANSFORMERS_CACHE="/srv/scratch/z5428797/.cache/huggingface/hub"
+export CUDA_VISIBLE_DEVICES=0
+export TOKENIZERS_PARALLELISM=false
+
+echo "=================================================="
+echo "  Job started at: $(date)"
+echo "  Node: $(hostname)"
+nvidia-smi
+echo "  Python: $(which python)"
+python -c "import torch; print('CUDA available:', torch.cuda.is_available()); print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'N/A')"
+echo "=================================================="
+
+echo ">>> STARTING FULL TRAINING PIPELINE"
+python run_experiments.py 2>&1
+
+echo ">>> TRAINING COMPLETE at $(date)"
+echo ">>> PUSHING MODELS TO HUGGINGFACE HUB"
+python push_to_hf.py 2>&1
+
+echo ">>> ALL DONE at $(date)"

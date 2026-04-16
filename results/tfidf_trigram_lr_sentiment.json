@@ -1,0 +1,12 @@
+{
+  "model": "TF-IDF (trigrams) + LR",
+  "task": "sentiment",
+  "accuracy": 0.8786,
+  "macro_f1": 0.831,
+  "per_class_f1": {
+    "negative": 0.7652,
+    "neutral": 0.9297,
+    "positive": 0.7981
+  },
+  "report": "              precision    recall  f1-score   support\n\n    negative     0.8148    0.7213    0.7652        61\n     neutral     0.8885    0.9748    0.9297       278\n    positive     0.8830    0.7281    0.7981       114\n\n    accuracy                         0.8786       453\n   macro avg     0.8621    0.8081    0.8310       453\nweighted avg     0.8772    0.8786    0.8744       453\n"
+}

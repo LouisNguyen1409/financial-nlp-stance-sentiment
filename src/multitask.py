@@ -37,7 +37,7 @@ from src.evaluate import (
     error_analysis,
 )
 from src.data_loader import compute_class_weights
-from src.finetune import TextClassificationDataset
+from src.finetune_fineBert import TextClassificationDataset
 
 torch.manual_seed(SEED)
 

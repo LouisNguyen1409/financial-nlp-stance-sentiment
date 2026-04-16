@@ -1,12 +1,12 @@
 {
   "model": "FinBERT (fine-tuned)",
   "task": "stance",
-  "accuracy": 0.6371,
-  "macro_f1": 0.6194,
+  "accuracy": 0.6129,
+  "macro_f1": 0.5988,
   "per_class_f1": {
-    "dovish": 0.5714,
-    "hawkish": 0.5612,
-    "neutral": 0.7256
+    "dovish": 0.5656,
+    "hawkish": 0.5316,
+    "neutral": 0.699
   },
-  "report": "              precision    recall  f1-score   support\n\n      dovish     0.5455    0.6000    0.5714       130\n     hawkish     0.4968    0.6446    0.5612       121\n     neutral     0.8163    0.6531    0.7256       245\n\n    accuracy                         0.6371       496\n   macro avg     0.6195    0.6326    0.6194       496\nweighted avg     0.6674    0.6371    0.6451       496\n"
+  "report": "              precision    recall  f1-score   support\n\n      dovish     0.4554    0.7462    0.5656       130\n     hawkish     0.5431    0.5207    0.5316       121\n     neutral     0.8623    0.5878    0.6990       245\n\n    accuracy                         0.6129       496\n   macro avg     0.6203    0.6182    0.5988       496\nweighted avg     0.6778    0.6129    0.6232       496\n"
 }

@@ -8,8 +8,12 @@ build/
 # Virtual environment
 venv/
 
-# Trained models (large binary files)
+# Trained models (large binary files – never commit to git)
 models/
+*.safetensors
+*.bin
+*.pt
+*.pth
 
 # OS files
 .DS_Store

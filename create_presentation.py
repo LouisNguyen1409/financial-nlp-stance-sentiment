@@ -276,8 +276,8 @@ def build():
     # Dataset table
     ds_rows = [
         ["Dataset", "Sentences", "Classes", "Label Distribution", "Notes"],
-        ["FOMC Hawkish-Dovish", "2,480", "3", "Neutral ~50%, Hawkish ~30%,\nDovish ~20%", "Significant class imbalance;\nweighted loss required"],
-        ["Financial PhraseBank", "2,264", "3", "Neutral ~59%, Positive ~28%,\nNegative ~13%", "100% annotator agreement\nsubset; cleaner labels"],
+        ["FOMC Hawkish-Dovish", "2,480", "3", "Neutral ~49%, Dovish ~26%,\nHawkish ~24%", "Significant class imbalance;\nweighted loss required"],
+        ["Financial PhraseBank", "2,264", "3", "Neutral ~61%, Positive ~25%,\nNegative ~14%", "100% annotator agreement\nsubset; cleaner labels"],
         ["Loughran-McDonald\nLexicon", "\u2014", "6 word lists", "Positive, Negative,\nUncertainty, Litigious, ...", "Domain-specific; used for\nrule-based + feature aug."],
     ]
     add_table(sl, Inches(0.5), Inches(1.55), Inches(12.3), Inches(2.5),
@@ -380,7 +380,7 @@ def build():
         ]),
         ("Pre-trained Evaluation", [
             "Zero-shot: FinBERT native sentiment head",
-            "Few-shot: 16-shot in-context w/ SetFit",
+            "Few-shot: 16-shot linear probe on frozen [CLS]",
             "Compare FinBERT vs BERT-base vs RoBERTa",
             "Purpose: quantify domain pre-training value",
         ]),
@@ -415,10 +415,11 @@ def build():
     # Results table
     bl_rows = [
         ["Model", "Sentiment Acc", "Sentiment F1", "Stance Acc", "Stance F1"],
-        ["TF-IDF + LR", "87.0%", "0.8382", "60.1%", "0.5612"],
-        ["TF-IDF + SVM (RBF)", "89.4%", "0.8661", "63.3%", "0.5830"],
-        ["LM Lexicon (rule-based)", "62.8%", "0.5100", "45.2%", "0.3880"],
-        ["TF-IDF + LM features + SVM", "89.6%", "0.8690", "62.8%", "0.5790"],
+        ["TF-IDF + LR", "87.20%", "0.8232", "60.89%", "0.5873"],
+        ["TF-IDF + SVM (LinearSVC)", "89.40%", "0.8534", "63.31%", "0.6061"],
+        ["TF-IDF (trigrams) + LR", "87.86%", "0.8310", "61.09%", "0.5914"],
+        ["LM Lexicon (rule-based)", "69.32%", "0.5315", "41.53%", "0.3885"],
+        ["TF-IDF + LM features + LR", "85.43%", "0.8050", "61.09%", "0.5863"],
     ]
     add_table(sl, Inches(0.5), Inches(1.5), Inches(12.3), Inches(2.5),
               bl_rows, font_size=13,
@@ -427,9 +428,9 @@ def build():
     add_textbox(sl, Inches(0.5), Inches(4.3), Inches(6), Inches(0.4),
                 "Key Observations", font_size=20, bold=True, color=DARK_BLUE)
     add_bullet_slide(sl, Inches(0.5), Inches(4.75), Inches(5.8), Inches(2.5), [
-        "TF-IDF + SVM is the strongest baseline (RBF kernel, C=10)",
+        "TF-IDF + SVM is the strongest baseline (LinearSVC, C=1.0)",
         "Lexicon alone is weak: rule-based matching lacks context",
-        "LM feature augmentation gives marginal lift (+0.2% sentiment)",
+        "LM feature augmentation does not improve over TF-IDF on sentiment",
         "Stance consistently harder: best baseline only 63.3% accuracy",
         "Macro-F1 penalises poor minority-class recall (dovish, negative)",
     ], font_size=14, color=BLACK)
@@ -452,10 +453,10 @@ def build():
 
     pt_rows = [
         ["Model", "Mode", "Sentiment Acc", "Sentiment F1", "Stance Acc", "Stance F1"],
-        ["FinBERT", "Zero-shot (native head)", "97.35%", "0.9583", "\u2014", "\u2014"],
-        ["FinBERT", "16-shot SetFit", "97.70%", "0.9630", "54.0%", "0.4900"],
-        ["BERT-base", "16-shot SetFit", "74.20%", "0.6680", "48.8%", "0.4330"],
-        ["RoBERTa-base", "16-shot SetFit", "69.50%", "0.6120", "47.2%", "0.4050"],
+        ["FinBERT", "Zero-shot (native head)", "97.35%", "0.9650", "49.80%", "0.4874"],
+        ["FinBERT", "16-shot linear probe", "98.01%", "0.9690", "48.59%", "0.4552"],
+        ["BERT-base", "16-shot linear probe", "74.61%", "0.6599", "37.90%", "0.3694"],
+        ["RoBERTa-base", "16-shot linear probe", "75.72%", "0.6439", "35.89%", "0.3489"],
     ]
     add_table(sl, Inches(0.5), Inches(1.5), Inches(12.3), Inches(2.6),
               pt_rows, font_size=13,
@@ -466,7 +467,7 @@ def build():
     add_bullet_slide(sl, Inches(0.5), Inches(4.85), Inches(5.8), Inches(2.2), [
         "FinBERT zero-shot: 97.35% sentiment with NO training data",
         "Domain pre-training encodes financial semantics directly",
-        "FinBERT 16-shot >> BERT 16-shot (+23.5 pp on sentiment)",
+        "FinBERT 16-shot >> BERT 16-shot (+23.4 pp on sentiment)",
         "General-purpose models struggle with financial vocabulary",
     ], font_size=14, color=BLACK)
 
@@ -496,7 +497,7 @@ def build():
         "Scheduler: linear warmup (10%) + linear decay",
         "Loss: weighted cross-entropy (inverse class freq.)",
         "Epochs: 5, batch_size=32, max_len=128",
-        "Results: 96.7% sentiment / 64.3% stance accuracy",
+        "Results: 96.69% sentiment / 61.29% stance accuracy",
         "Fast convergence; FinBERT features are already aligned",
     ], font_size=13, color=BLACK)
 
@@ -508,9 +509,9 @@ def build():
         "Layer-wise LR Decay (LLRD): factor=0.9 per layer",
         "Top layers learn fast, bottom layers preserved",
         "Gradual unfreezing: freeze all, unfreeze top \u2192 bottom",
-        "Label smoothing: \u03b1=0.1 for regularisation",
-        "Epochs: 10, lr=3e-5, batch_size=16",
-        "Results: 96.5% sentiment / 63.7% stance accuracy",
+        "Label smoothing: \u03b5=0.1 for regularisation",
+        "Epochs: 10, head lr=2e-5, batch_size=32",
+        "Results: 96.91% sentiment / 65.12% stance accuracy",
         "More epochs needed vs FinBERT; LLRD prevents catastrophic forgetting",
     ], font_size=13, color=BLACK)
 
@@ -542,7 +543,7 @@ def build():
         "Weighted CE for stance (handles class imbalance)",
         "Standard CE for sentiment (more balanced)",
         "AdamW, lr=2e-5, 8 epochs, linear warmup + decay",
-        "Early stopping on combined validation loss",
+        "Best-checkpoint selection by average val macro-F1",
     ], font_size=13, color=BLACK)
 
     add_textbox(sl, Inches(7.0), Inches(3.8), Inches(5.8), Inches(0.4),
@@ -552,7 +553,7 @@ def build():
         ["Metric", "Sentiment", "Stance"],
         ["Accuracy", "98.45%", "67.74%"],
         ["Macro-F1", "0.9772", "0.6684"],
-        ["Weighted-F1", "0.9800", "0.6583"],
+        ["Weighted-F1", "0.9846", "0.6835"],
     ]
     add_table(sl, Inches(7.0), Inches(4.3), Inches(5.0), Inches(1.6),
               res_rows, font_size=14,
@@ -571,15 +572,17 @@ def build():
 
     summary_rows = [
         ["Model", "Sent. Acc", "Sent. F1", "Stance Acc", "Stance F1", "Notes"],
-        ["TF-IDF + LR", "87.0%", "0.838", "60.1%", "0.561", "Baseline"],
-        ["TF-IDF + SVM", "89.4%", "0.866", "63.3%", "0.583", "Best baseline"],
-        ["LM Lexicon (rule)", "62.8%", "0.510", "45.2%", "0.388", "No context"],
-        ["TF-IDF + LM + SVM", "89.6%", "0.869", "62.8%", "0.579", "Lexicon aug."],
-        ["FinBERT zero-shot", "97.35%", "0.958", "\u2014", "\u2014", "Native head"],
-        ["FinBERT 16-shot", "97.70%", "0.963", "54.0%", "0.490", "SetFit"],
-        ["BERT 16-shot", "74.20%", "0.668", "48.8%", "0.433", "SetFit"],
-        ["FinBERT fine-tuned", "96.7%", "0.952", "64.3%", "0.626", "Single-task"],
-        ["BERT + LLRD", "96.5%", "0.948", "63.7%", "0.618", "Single-task"],
+        ["TF-IDF + LR", "87.20%", "0.823", "60.89%", "0.587", "Baseline"],
+        ["TF-IDF + SVM", "89.40%", "0.853", "63.31%", "0.606", "Best baseline"],
+        ["TF-IDF (tri) + LR", "87.86%", "0.831", "61.09%", "0.591", "Trigram variant"],
+        ["LM Lexicon (rule)", "69.32%", "0.532", "41.53%", "0.389", "No context"],
+        ["TF-IDF + LM + LR", "85.43%", "0.805", "61.09%", "0.586", "Lexicon aug."],
+        ["FinBERT zero-shot", "97.35%", "0.965", "49.80%", "0.487", "Native head"],
+        ["FinBERT 16-shot", "98.01%", "0.969", "48.59%", "0.455", "Linear probe"],
+        ["BERT 16-shot", "74.61%", "0.660", "37.90%", "0.369", "Linear probe"],
+        ["RoBERTa 16-shot", "75.72%", "0.644", "35.89%", "0.349", "Linear probe"],
+        ["FinBERT fine-tuned", "96.69%", "0.947", "61.29%", "0.599", "Single-task"],
+        ["BERT + LLRD", "96.91%", "0.953", "65.12%", "0.637", "Single-task"],
         ["Multi-task FinBERT", "98.45%", "0.977", "67.74%", "0.668", "BEST"],
     ]
     add_table(sl, Inches(0.5), Inches(1.5), Inches(12.3), Inches(5.2),
@@ -669,12 +672,13 @@ def build():
                 "Multi-task Effect on Error Reduction", font_size=20, bold=True, color=DARK_BLUE)
 
     err_rows = [
-        ["Error Type", "Single-task FinBERT", "Multi-task FinBERT", "Change"],
-        ["Neutral\u2192Hawkish (stance)", "18.2%", "15.4%", "\u22122.8 pp"],
-        ["Hawkish\u2192Neutral (stance)", "14.6%", "13.1%", "\u22121.5 pp"],
-        ["Neutral\u2192Negative (sent.)", "2.1%", "1.4%", "\u22120.7 pp"],
-        ["Overall error rate (sent.)", "3.3%", "1.99%", "\u22121.3 pp"],
-        ["Overall error rate (stance)", "35.7%", "34.07%", "\u22121.6 pp"],
+        ["Metric", "Single-task FinBERT", "Multi-task FinBERT", "Change"],
+        ["Sentiment accuracy", "96.69%", "98.45%", "+1.76 pp"],
+        ["Sentiment macro-F1", "0.9467", "0.9772", "+3.05 pp"],
+        ["Sentiment error rate", "3.31%", "1.55%", "\u22121.76 pp"],
+        ["Stance accuracy", "61.29%", "67.74%", "+6.45 pp"],
+        ["Stance macro-F1", "0.5988", "0.6684", "+6.96 pp"],
+        ["Stance error rate", "38.71%", "32.26%", "\u22126.45 pp"],
     ]
     add_table(sl, Inches(0.5), Inches(5.0), Inches(12.3), Inches(2.2),
               err_rows, font_size=12,
@@ -769,7 +773,8 @@ def build():
 
 
 def main():
-    out_dir = "/srv/scratch/z5428797/NLP/financial-nlp-stance-sentiment/presentation"
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    out_dir = os.path.join(project_root, "presentation")
     os.makedirs(out_dir, exist_ok=True)
     out_path = os.path.join(out_dir, "COMP6713_Financial_NLP.pptx")
 

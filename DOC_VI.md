@@ -552,7 +552,7 @@ train_test_split(df, test_size=0.2, stratify=df["label"], random_state=42)
 Các tập chia: **70% huấn luyện / 10% xác nhận / 20% kiểm thử**.
 
 - **Huấn luyện (Train)**: Mô hình học từ dữ liệu này
-- **Xác nhận (Validation)**: Dùng để chọn mô hình tốt nhất (dừng sớm)
+- **Xác nhận (Validation)**: Dùng để chọn mô hình tốt nhất (chọn checkpoint có val macro-F1 cao nhất)
 - **Kiểm thử (Test)**: Đánh giá cuối cùng — KHÔNG BAO GIỜ được dùng trong
   quá trình huấn luyện
 

@@ -570,13 +570,14 @@ starting checkpoint for well-aligned tasks.
 \subsection{Traditional Baselines}
 
 Among traditional methods, TF-IDF + SVM is the strongest, achieving
-89.40\% on sentiment and 63.31\% on stance.  The SVM's ability to find
-non-linear boundaries in high-dimensional TF-IDF space gives it a
-consistent edge over logistic regression.  Extending to trigrams provides
-marginal improvement, while adding Loughran-McDonald lexicon features
-actually \emph{hurts} TF-IDF performance, likely because the lexicon
-introduces noise when its categories do not align perfectly with the
-task labels.
+89.40\% on sentiment and 63.31\% on stance.  The linear SVM's
+hinge-loss objective concentrates on support vectors near the decision
+boundary, giving it a consistent edge over logistic regression on the
+sparse high-dimensional TF-IDF feature space.  Extending to trigrams
+provides marginal improvement, while adding Loughran-McDonald lexicon
+features actually \emph{hurts} TF-IDF performance, likely because the
+lexicon introduces noise when its categories do not align perfectly
+with the task labels.
 
 \subsection{Error Analysis}
 \label{sec:errors}

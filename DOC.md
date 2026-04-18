@@ -525,7 +525,7 @@ train_test_split(df, test_size=0.2, stratify=df["label"], random_state=42)
 The splits are: **70% train / 10% validation / 20% test**.
 
 - **Train**: Model learns from this data
-- **Validation**: Used to pick the best model (early stopping)
+- **Validation**: Used to pick the best model (best-checkpoint selection by val macro-F1)
 - **Test**: Final evaluation — NEVER used during training
 
 The `random_state=42` ensures the same split every time we run the code.

@@ -1,0 +1,321 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{none/global//global/global}
+  \entry{shah2023trillion}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=SA}{%
+         family={Shah},
+         familyi={S\bibinitperiod},
+         given={Agam},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=PS}{%
+         family={Paturi},
+         familyi={P\bibinitperiod},
+         given={Suvan},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=CS}{%
+         family={Chava},
+         familyi={C\bibinitperiod},
+         given={Sudheer},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SA+1}
+    \strng{fullhash}{SAPSCS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{Proceedings of the 61st Annual Meeting of the Association
+  for Computational Linguistics (ACL)}
+    \field{title}{Trillion Dollar Words: A New Financial Dataset, Task {\&}
+  Market Analysis}
+    \field{year}{2023}
+  \endentry
+
+  \entry{malo2014good}{article}{}
+    \name{author}{5}{}{%
+      {{hash=MP}{%
+         family={Malo},
+         familyi={M\bibinitperiod},
+         given={Pekka},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=SA}{%
+         family={Sinha},
+         familyi={S\bibinitperiod},
+         given={Ankur},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=KP}{%
+         family={Korhonen},
+         familyi={K\bibinitperiod},
+         given={Pekka},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=WJ}{%
+         family={Wallenius},
+         familyi={W\bibinitperiod},
+         given={Jyrki},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=TP}{%
+         family={Takala},
+         familyi={T\bibinitperiod},
+         given={Pyry},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MP+1}
+    \strng{fullhash}{MPSAKPWJTP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{number}{4}
+    \field{pages}{782\bibrangedash 796}
+    \field{title}{Good Debt or Bad Debt: Detecting Semantic Orientations in
+  Economic Texts}
+    \field{volume}{65}
+    \field{journaltitle}{Journal of the Association for Information Science and
+  Technology}
+    \field{year}{2014}
+  \endentry
+
+  \entry{loughran2011liability}{article}{}
+    \name{author}{2}{}{%
+      {{hash=LT}{%
+         family={Loughran},
+         familyi={L\bibinitperiod},
+         given={Tim},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=MB}{%
+         family={McDonald},
+         familyi={M\bibinitperiod},
+         given={Bill},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LTMB1}
+    \strng{fullhash}{LTMB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{number}{1}
+    \field{pages}{35\bibrangedash 65}
+    \field{title}{When Is a Liability Not a Liability? {T}extual Analysis,
+  Dictionaries, and 10-{K}s}
+    \field{volume}{66}
+    \field{journaltitle}{The Journal of Finance}
+    \field{year}{2011}
+  \endentry
+
+  \entry{araci2019finbert}{article}{}
+    \name{author}{1}{}{%
+      {{hash=AD}{%
+         family={Araci},
+         familyi={A\bibinitperiod},
+         given={Dogu},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AD1}
+    \strng{fullhash}{AD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{{FinBERT}: Financial Sentiment Analysis with Pre-trained
+  Language Models}
+    \field{journaltitle}{arXiv preprint arXiv:1908.10063}
+    \field{year}{2019}
+  \endentry
+
+  \entry{yang2020finbert}{article}{}
+    \name{author}{3}{}{%
+      {{hash=YY}{%
+         family={Yang},
+         familyi={Y\bibinitperiod},
+         given={Yi},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=UMCS}{%
+         family={Uy},
+         familyi={U\bibinitperiod},
+         given={Mark Christopher\bibnamedelima Siy},
+         giveni={M\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim
+  S\bibinitperiod},
+      }}%
+      {{hash=HA}{%
+         family={Huang},
+         familyi={H\bibinitperiod},
+         given={Allen},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{YY+1}
+    \strng{fullhash}{YYUMCSHA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{{FinBERT}: A Pretrained Language Model for Financial
+  Communications}
+    \field{journaltitle}{arXiv preprint arXiv:2006.08097}
+    \field{year}{2020}
+  \endentry
+
+  \entry{devlin2019bert}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=DJ}{%
+         family={Devlin},
+         familyi={D\bibinitperiod},
+         given={Jacob},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=CMW}{%
+         family={Chang},
+         familyi={C\bibinitperiod},
+         given={Ming-Wei},
+         giveni={M\bibinithyphendelim W\bibinitperiod},
+      }}%
+      {{hash=LK}{%
+         family={Lee},
+         familyi={L\bibinitperiod},
+         given={Kenton},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=TK}{%
+         family={Toutanova},
+         familyi={T\bibinitperiod},
+         given={Kristina},
+         giveni={K\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DJ+1}
+    \strng{fullhash}{DJCMWLKTK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{Proceedings of the 2019 Conference of the North American
+  Chapter of the Association for Computational Linguistics: Human Language
+  Technologies (NAACL-HLT)}
+    \field{pages}{4171\bibrangedash 4186}
+    \field{title}{{BERT}: Pre-training of Deep Bidirectional Transformers for
+  Language Understanding}
+    \field{year}{2019}
+  \endentry
+
+  \entry{howard2018ulmfit}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=HJ}{%
+         family={Howard},
+         familyi={H\bibinitperiod},
+         given={Jeremy},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=RS}{%
+         family={Ruder},
+         familyi={R\bibinitperiod},
+         given={Sebastian},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HJRS1}
+    \strng{fullhash}{HJRS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{Proceedings of the 56th Annual Meeting of the Association
+  for Computational Linguistics (ACL)}
+    \field{pages}{328\bibrangedash 339}
+    \field{title}{Universal Language Model Fine-tuning for Text Classification}
+    \field{year}{2018}
+  \endentry
+
+  \entry{sun2019finetune}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=SC}{%
+         family={Sun},
+         familyi={S\bibinitperiod},
+         given={Chi},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=QX}{%
+         family={Qiu},
+         familyi={Q\bibinitperiod},
+         given={Xipeng},
+         giveni={X\bibinitperiod},
+      }}%
+      {{hash=XY}{%
+         family={Xu},
+         familyi={X\bibinitperiod},
+         given={Yige},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=HX}{%
+         family={Huang},
+         familyi={H\bibinitperiod},
+         given={Xuanjing},
+         giveni={X\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SC+1}
+    \strng{fullhash}{SCQXXYHX1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{China National Conference on Chinese Computational
+  Linguistics (CCL)}
+    \field{pages}{194\bibrangedash 206}
+    \field{title}{How to Fine-Tune {BERT} for Text Classification?}
+    \field{year}{2019}
+  \endentry
+
+  \entry{liu2019mt-dnn}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=LX}{%
+         family={Liu},
+         familyi={L\bibinitperiod},
+         given={Xiaodong},
+         giveni={X\bibinitperiod},
+      }}%
+      {{hash=HP}{%
+         family={He},
+         familyi={H\bibinitperiod},
+         given={Pengcheng},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=CW}{%
+         family={Chen},
+         familyi={C\bibinitperiod},
+         given={Weizhu},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=GJ}{%
+         family={Gao},
+         familyi={G\bibinitperiod},
+         given={Jianfeng},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LX+1}
+    \strng{fullhash}{LXHPCWGJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{booktitle}{Proceedings of the 57th Annual Meeting of the Association
+  for Computational Linguistics (ACL)}
+    \field{pages}{4487\bibrangedash 4496}
+    \field{title}{Multi-Task Deep Neural Networks for Natural Language
+  Understanding}
+    \field{year}{2019}
+  \endentry
+\enddatalist
+\endinput

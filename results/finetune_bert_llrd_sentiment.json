@@ -1,0 +1,12 @@
+{
+  "model": "BERT-base LLRD + Gradual Unfreezing",
+  "task": "sentiment",
+  "accuracy": 0.9757,
+  "macro_f1": 0.967,
+  "per_class_f1": {
+    "negative": 0.96,
+    "neutral": 0.9891,
+    "positive": 0.952
+  },
+  "report": "              precision    recall  f1-score   support\n\n    negative     0.9375    0.9836    0.9600        61\n     neutral     0.9964    0.9820    0.9891       278\n    positive     0.9478    0.9561    0.9520       114\n\n    accuracy                         0.9757       453\n   macro avg     0.9606    0.9739    0.9670       453\nweighted avg     0.9762    0.9757    0.9759       453\n"
+}

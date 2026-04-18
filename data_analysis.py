@@ -1,6 +1,21 @@
 """
 Comprehensive data analysis for the Financial NLP project.
-Generates visualizations and statistics for the report and presentation.
+
+Reads results/all_results_summary.json and both datasets via
+src.data_loader, then writes 10 PNG plots + a dataset-statistics JSON
+to analysis/. Produced plots:
+    - class_distribution.png
+    - text_length_distribution.png
+    - top_words_per_class.png
+    - lexicon_coverage.png
+    - model_comparison.png
+    - per_class_f1_heatmap.png
+    - performance_progression.png
+    - multitask_improvement.png
+    - domain_pretraining_gap.png
+    - task_difficulty_gap.png
+
+Assumes training has already been run (results/ is populated).
 
 Usage:
     python data_analysis.py

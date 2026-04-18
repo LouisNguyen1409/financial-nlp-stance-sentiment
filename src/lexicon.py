@@ -1,16 +1,29 @@
 """
-Lexicon-based classification using the Loughran-McDonald (LM) Financial Sentiment Dictionary.
+Lexicon-based classification using the Loughran-McDonald (LM) Financial
+Sentiment Dictionary, augmented with a custom monetary-policy lexicon.
 
-The LM dictionary is the standard lexicon for financial text analysis.
-It categorises words into sentiment categories:
-  - Positive (e.g., "achieve", "benefit", "gain")
-  - Negative (e.g., "loss", "decline", "risk")
-  - Uncertainty (e.g., "approximate", "contingent", "depend")
-  - Constraining (e.g., "commit", "obligation", "restrict")
+We ship five curated word lists:
+  - LM_POSITIVE    (~110 words)  e.g., "achieve", "benefit", "gain"
+  - LM_NEGATIVE    (~230 words)  e.g., "loss", "decline", "risk"
+  - LM_UNCERTAINTY (~90 words)   e.g., "approximate", "contingent"
+  - HAWKISH_WORDS  (~40 words)   monetary-tightening cues
+                                  (e.g., "tighten", "hike", "restrictive")
+  - DOVISH_WORDS   (~50 words)   monetary-easing cues
+                                  (e.g., "cut", "ease", "accommodate")
 
-We use these word lists to:
-  1. Build a rule-based sentiment/stance classifier (counts-based)
-  2. Create lexicon features that augment TF-IDF for a stronger baseline
+Positive / negative / uncertainty are curated subsets of the
+Loughran-McDonald Master Dictionary (2011, updated 2023); hawkish / dovish
+are task-specific additions for FOMC stance classification, assembled from
+central-banking literature.
+
+Pipelines (both invoked by run_lexicon_experiments(...) in step 2b of
+run_experiments.py):
+  1. lexicon_rule_based(...)   — counts-based classifier (no training)
+  2. lexicon_plus_tfidf(...)   — 8 lexicon features (pos/neg/unc/hawk/dove
+                                  counts + net_sentiment + net_stance +
+                                  total_words, standardised) concatenated
+                                  with a TF-IDF vector and fed to Logistic
+                                  Regression
 
 Reference:
   Loughran, T. and McDonald, B. (2011). "When Is a Liability Not a Liability?

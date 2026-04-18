@@ -15,15 +15,16 @@ By the end, you should understand **why** every decision was made,
 4. [Project Architecture](#4-project-architecture)
 5. [Datasets In Depth](#5-datasets-in-depth)
 6. [The Loughran-McDonald Lexicon](#6-the-loughran-mcdonald-lexicon)
-7. [Baseline Model: TF-IDF + Logistic Regression](#7-baseline-model-tf-idf--logistic-regression)
+7. [Baseline Model: TF-IDF + Logistic Regression (plus Alternatives)](#7-baseline-model-tf-idf--logistic-regression)
 8. [Pre-trained Transformer Models](#8-pre-trained-transformer-models)
-9. [Fine-tuning FinBERT](#9-fine-tuning-finbert)
+9. [Fine-tuning FinBERT and BERT-base](#9-fine-tuning-finbert)
 10. [Multi-task Learning](#10-multi-task-learning)
 11. [Evaluation Methodology](#11-evaluation-methodology)
-12. [CLI and Demo](#12-cli-and-demo)
+12. [CLI, Demo, and HuggingFace Publishing](#12-cli-and-demo)
 13. [Bugs Encountered and How They Were Fixed](#13-bugs-encountered-and-how-they-were-fixed)
 14. [Results Analysis](#14-results-analysis)
 15. [Key Takeaways](#15-key-takeaways)
+16. [Complete Code Reference](#16-complete-code-reference--every-function-explained)
 
 ---
 
@@ -70,9 +71,9 @@ The course requires a minimum of 80 credits across four parts:
 |------|---------|-------------|---------|
 | A: Problem Definition | 10 | 2 NLP problems × 5 + 2 text domains × 5 | 20 |
 | B: Dataset Selection | 20 | 2 existing datasets (10) + 1 lexicon (10) | 20 |
-| C: Modelling | 30 | Baseline + 3 pretrained + fine-tune + multi-task | 65+ |
-| D: Evaluation | 20 | Quantitative + qualitative + CLI + demo | 30 |
-| **Total** | **80** | | **135+** |
+| C: Modelling | 30 | Baseline + 3 alt. baselines + 3 pretrained + FinBERT FT + BERT LLRD + multi-task | 80+ |
+| D: Evaluation | 20 | Quantitative + qualitative + CLI + demo + HF Hub publishing | 35 |
+| **Total** | **80** | | **155+** |
 
 ---
 
@@ -398,20 +399,29 @@ Project/
 ├── src/
 │   ├── __init__.py            # Makes src/ a Python package
 │   ├── data_loader.py         # Downloads and splits datasets
-│   ├── baseline.py            # TF-IDF + Logistic Regression
+│   ├── baseline.py            # TF-IDF + LR + alternative baselines (SVM, trigrams)
 │   ├── lexicon.py             # Loughran-McDonald lexicon approach
 │   ├── pretrained_eval.py     # Zero-shot + few-shot experiments
-│   ├── finetune.py            # Single-task FinBERT fine-tuning
+│   ├── finetune_fineBert.py   # Single-task FinBERT fine-tuning
+│   ├── finetune_bert.py       # BERT-base-uncased with LLRD + gradual unfreezing
 │   ├── multitask.py           # Multi-task model architecture + training
 │   └── evaluate.py            # Metrics, plots, error analysis
-├── run_experiments.py         # Orchestrates all experiments (Steps 1-5)
+├── run_experiments.py         # Orchestrates all experiments (Steps 1-6)
 ├── cli.py                     # Command-line prediction tool
 ├── demo.py                    # Gradio web interface
+├── push_to_hf.py              # Uploads trained models to HuggingFace Hub
+├── data_analysis.py           # Generates 10 analysis plots + dataset stats
+├── create_presentation.py     # Builds the slide-deck / report artefacts
 ├── requirements.txt           # Python dependencies
+├── analysis/                  # 10 PNG plots produced by data_analysis.py
 ├── models/                    # Saved model weights after training
-│   ├── finbert_stance/        # Fine-tuned stance model
-│   ├── finbert_sentiment/     # Fine-tuned sentiment model
-│   └── multitask_finbert/     # Multi-task model
+│   ├── finbert_stance/        # FinBERT fine-tuned for stance
+│   ├── finbert_sentiment/     # FinBERT fine-tuned for sentiment
+│   ├── bert_llrd_stance/      # BERT-base LLRD for stance (created by step 6)
+│   ├── bert_llrd_sentiment/   # BERT-base LLRD for sentiment (created by step 6)
+│   └── multitask_finbert/     # Multi-task model (shared encoder + 2 heads)
+│   # Only finbert_* and multitask_finbert are committed; bert_llrd_* are
+│   # regenerated locally via `python run_experiments.py --step 6`.
 └── results/                   # JSON metrics + PNG confusion matrices
 ```
 
@@ -420,19 +430,24 @@ Project/
 ```
 run_experiments.py
     │
-    ├── Step 1: data_loader.py → Downloads FOMC + FPB datasets
-    │                            Splits into train/val/test
+    ├── Step 1: data_loader.py     → Downloads FOMC + FPB datasets
+    │                                Splits into train/val/test
     │
-    ├── Step 2: baseline.py    → TF-IDF + LR on both tasks
-    │           lexicon.py     → LM lexicon rule-based + TF-IDF+lexicon
+    ├── Step 2: baseline.py        → TF-IDF + LR (original baseline)
+    │                                + TF-IDF + SVM (alternative)
+    │                                + TF-IDF (trigrams) + LR (alternative)
+    │           lexicon.py         → LM lexicon rule-based + TF-IDF+lexicon
     │
     ├── Step 3: pretrained_eval.py → FinBERT zero-shot
     │                                Few-shot (FinBERT, BERT, RoBERTa)
     │
-    ├── Step 4: finetune.py    → FinBERT fine-tuned on FOMC
-    │                            FinBERT fine-tuned on FPB
+    ├── Step 4: finetune_fineBert.py → FinBERT fine-tuned on FOMC
+    │                                  FinBERT fine-tuned on FPB
     │
-    └── Step 5: multitask.py   → Joint training on both datasets
+    ├── Step 5: multitask.py       → Joint training on both datasets
+    │
+    └── Step 6: finetune_bert.py   → BERT-base + LLRD + gradual unfreezing
+                                     (stance + sentiment, separate models)
 ```
 
 Each step uses `evaluate.py` to compute metrics and save results.
@@ -667,6 +682,47 @@ sentiment often correlates with specific words ("profit" → positive, "loss"
 → negative). Stance is harder because the same words can appear in both
 hawkish and dovish contexts — it depends on the **full sentence meaning**.
 
+### 7.4 Alternative Non-Neural Baselines
+
+Beyond the original TF-IDF + LR baseline, `src/baseline.py` now runs two
+additional non-neural pipelines that are often stronger in practice:
+
+**TF-IDF (1-2 grams) + Linear SVM** — `build_tfidf_svm_pipeline()`
+
+```python
+LinearSVC(max_iter=2000, class_weight="balanced", C=1.0, random_state=SEED)
+```
+
+Linear SVMs maximise the **margin** between classes in the TF-IDF feature
+space. For high-dimensional sparse data (50k TF-IDF features), LinearSVC is
+usually slightly stronger than Logistic Regression because it optimises a
+hinge loss that cares only about support vectors (points near the boundary).
+
+**TF-IDF (1-3 grams) + Logistic Regression** — `build_tfidf_trigram_lr_pipeline()`
+
+```python
+TfidfVectorizer(max_features=80_000, ngram_range=(1, 3),
+                sublinear_tf=True, min_df=2)
+```
+
+Extending n-grams to 3 lets the model capture short phrases like
+*"rate hike cycle"* or *"below zero lower bound"*. `min_df=2` drops extremely
+rare n-grams to control the feature space; `max_features=80_000` raises the
+vocabulary cap to accommodate the larger n-gram space.
+
+**Results on the test sets**
+
+| Baseline | Stance Acc | Stance F1 | Sent. Acc | Sent. F1 |
+|----------|-----------|-----------|-----------|----------|
+| TF-IDF + LR (original)          | 0.6089 | 0.5873 | 0.8720 | 0.8232 |
+| TF-IDF + SVM                    | **0.6331** | **0.6061** | **0.8940** | **0.8534** |
+| TF-IDF (trigrams) + LR          | 0.6109 | 0.5914 | 0.8786 | 0.8310 |
+
+SVM is the strongest non-neural baseline on **both** tasks. Trigram features
+give a small but consistent bump over the bigram baseline for sentiment.
+These models are produced via `run_alternative_baselines(fomc, fpb)` during
+step 2 of `run_experiments.py`.
+
 ---
 
 ## 8. Pre-trained Transformer Models
@@ -758,7 +814,19 @@ that don't capture financial meaning well.
 
 ---
 
-## 9. Fine-tuning FinBERT
+## 9. Fine-tuning FinBERT and BERT-base
+
+This project actually ships **two** fine-tuning strategies:
+
+1. **Single-task FinBERT fine-tuning** (`src/finetune_fineBert.py`) —
+   the standard recipe: unfreeze all layers from epoch 1, use a single
+   uniform learning rate, linear warmup + decay schedule.
+2. **BERT-base with LLRD + Gradual Unfreezing** (`src/finetune_bert.py`) —
+   a more conservative strategy applied to a *non-domain* base model to
+   show that disciplined fine-tuning can close most of the gap with
+   domain-pretrained FinBERT.
+
+Sections 9.1–9.6 describe strategy #1. Section 9.7 describes strategy #2.
 
 ### 9.1 What Changes During Fine-tuning
 
@@ -771,7 +839,7 @@ The model starts from pre-trained weights and gradually adapts:
 - **Later layers** increasingly specialize for the target task
 - **Classification head** (new, randomly initialized) learns the task mapping
 
-### 9.2 Training Loop (`src/finetune.py`)
+### 9.2 Training Loop (`src/finetune_fineBert.py`)
 
 ```python
 for epoch in range(FINETUNE_EPOCHS):
@@ -860,12 +928,103 @@ together as a single tensor. `truncation=True` cuts sequences longer than 128.
 
 | Task | Accuracy | Macro-F1 |
 |------|----------|----------|
-| Stance | 0.6371 | 0.6194 |
-| Sentiment | 0.9669 | 0.9459 |
+| Stance | 0.6129 | 0.5988 |
+| Sentiment | 0.9669 | 0.9467 |
 
 Fine-tuning improves over the baseline by:
-- Stance: +2.8% accuracy, +3.2% F1 (modest — stance is hard)
-- Sentiment: +9.5% accuracy, +12.3% F1 (dramatic improvement)
+- Stance: +0.4% accuracy, +1.2% F1 (modest — stance is hard)
+- Sentiment: +9.5% accuracy, +12.4% F1 (dramatic improvement)
+
+### 9.7 BERT-base-uncased with LLRD + Gradual Unfreezing
+
+File: `src/finetune_bert.py`. Invoked by step 6 of `run_experiments.py`.
+
+**Motivation.** `src/finetune_fineBert.py` fine-tunes a *domain-pretrained*
+model (FinBERT) uniformly. What if we use a general-purpose BERT instead,
+but with a much more careful fine-tuning recipe? That's the purpose of this
+branch — it uses two well-known techniques together:
+
+1. **Gradual Unfreezing** (Howard & Ruder, 2018 — ULMFiT):
+   Unfreeze layer groups one at a time, starting from the classification
+   head and moving down toward the embeddings. This prevents random
+   gradients from the untrained head from immediately corrupting the
+   pre-trained lower layers.
+
+2. **Layer-wise Learning Rate Decay (LLRD)** (Sun et al., 2019):
+   Every active layer gets a different learning rate. The head uses the
+   full `base_lr`; each layer below is multiplied by `decay^depth`. Lower
+   (more general) layers change very slowly, while higher (more
+   task-specific) layers change faster.
+
+**Layer groups** (top → bottom):
+```
+index  0 : classifier head + BERT pooler      lr = 2e-5
+index  1 : encoder layer 11                   lr = 2e-5 × 0.9^1 = 1.80e-5
+index  2 : encoder layer 10                   lr = 2e-5 × 0.9^2 = 1.62e-5
+...
+index 12 : encoder layer  0                   lr = 2e-5 × 0.9^12 ≈ 5.6e-6
+index 13 : token / position / type embeddings lr = 2e-5 × 0.9^13 ≈ 5.1e-6
+```
+
+**Unfreezing schedule** (epoch is 1-indexed):
+```
+epoch  1 → only group 0 active (head only)
+epoch  2 → groups 0–1 active    (head + layer 11)
+epoch  3 → groups 0–2 active
+...
+epoch 10 → groups 0–9 active
+(Training stops at 10 epochs; the lowest 4 groups stay frozen.)
+```
+
+At each epoch we **rebuild the optimizer** so only `requires_grad=True`
+parameters receive gradients. Parameters in the still-frozen groups are
+excluded entirely, saving compute and memory.
+
+**Hyperparameters** (set at the top of `src/finetune_bert.py`):
+```python
+LLRD_BASE_LR    = 2e-5     # head LR
+LLRD_DECAY      = 0.9      # per-depth multiplicative decay
+LABEL_SMOOTHING = 0.1      # regularises over-confidence on small datasets
+BERT_EPOCHS     = 10       # one extra per epoch for gradual unfreezing
+NUM_BERT_LAYERS = 12       # bert-base-uncased encoder layers
+```
+
+**Loss.** For **stance**, class weights are combined with label smoothing:
+
+```python
+criterion = nn.CrossEntropyLoss(
+    weight=torch.tensor(class_weights).to(device),
+    label_smoothing=LABEL_SMOOTHING,
+)
+```
+
+For **sentiment**, plain label-smoothed CE is used (FPB is less imbalanced).
+Label smoothing replaces the hard one-hot target `[0, 1, 0]` with a softer
+`[0.033, 0.933, 0.033]` (for ε=0.1, 3 classes). This prevents the model
+from becoming pathologically confident on a small dataset.
+
+**Other details.** No LR scheduler is needed — gradual unfreezing acts as an
+implicit warmup. Gradient clipping (`max_norm=1.0`) guards against
+exploding gradients when many layers are suddenly active. The head has
+`weight_decay=0.0` (so bias-heavy logits aren't shrunk); every other group
+uses `WEIGHT_DECAY = 0.01`.
+
+**Results.**
+
+| Task | Accuracy | Macro-F1 |
+|------|----------|----------|
+| Stance    | 0.6512 | 0.6371 |
+| Sentiment | 0.9691 | 0.9533 |
+
+For **stance**, BERT-base + LLRD actually **beats** single-task FinBERT
+(0.6371 vs 0.5988 macro-F1). This is the key finding of this branch:
+a disciplined fine-tuning recipe can offset the lack of domain pretraining
+on a task where FinBERT's domain advantage is weak (stance was never in
+FinBERT's training objective). For **sentiment**, FinBERT still edges ahead
+slightly (0.9467 single-task vs 0.9533 LLRD — the BERT LLRD is competitive
+but FinBERT's built-in sentiment head is hard to beat).
+
+Saved to `models/bert_llrd_stance/` and `models/bert_llrd_sentiment/`.
 
 ---
 
@@ -947,28 +1106,37 @@ This prevents optimizing for one task at the expense of the other.
 
 | Task | Single-task F1 | Multi-task F1 | Improvement |
 |------|---------------|---------------|-------------|
-| Stance | 0.6194 | **0.6478** | +0.0284 |
-| Sentiment | 0.9459 | **0.9666** | +0.0207 |
+| Stance | 0.5988 | **0.6684** | +0.0696 |
+| Sentiment | 0.9467 | **0.9772** | +0.0305 |
 
 **Multi-task improves both tasks.** The shared encoder benefits from seeing
 more diverse financial text. The stance task especially benefits because it
-has fewer training samples — the sentiment data provides helpful regularization.
+has fewer training samples — the sentiment data provides helpful
+regularization, and the ~7 F1-point jump over single-task FinBERT is the
+largest improvement seen in the entire model progression.
 
 ### 10.6 Error Analysis
 
-The multi-task model makes 169 errors on stance:
-```
-neutral → hawkish: 49    (most common — neutral sentences with slight hawkish hints)
-neutral → dovish:  39    (neutral sentences with slight dovish hints)
-dovish → hawkish:  26    (confused dovish/hawkish — subtle language differences)
-```
+On stance, the remaining errors are dominated by genuinely ambiguous
+neutral-vs-leaning sentences (sampled below from
+`results/all_results_summary.json → stance_errors`):
+
+- *"In light of increased uncertainties and muted inflation pressures..."*
+  → predicted **hawkish**, truly **dovish** (the model latched onto
+  "uncertainties" rather than "muted inflation pressures").
+- *"With an increase in the target range at this meeting..."*
+  → predicted **neutral**, truly **hawkish** (factual language hides the
+  hawkish implication of the action being described).
+- *"Looking ahead, reports from retailer contacts ..."*
+  → predicted **dovish**, truly **neutral** (reporting-on-data vs. stance).
 
 These errors are understandable. Neutral FOMC sentences often contain
 **mixed signals** — both hawkish and dovish elements — making classification
 genuinely ambiguous even for human experts.
 
-On sentiment, only 9 errors total — 4 of which are "positive → negative"
-(e.g., a positive sentence about one company mentioning a competitor's loss).
+On sentiment, only 7 errors total on the 453-sample test set; the majority
+are *"positive → negative"* or *"neutral → positive"* confusions where a
+profit/loss comparison sentence is interpretable either way.
 
 ---
 
@@ -1038,7 +1206,7 @@ error type (e.g., "dovish → hawkish"). Examining these errors reveals:
 
 ---
 
-## 12. CLI and Demo
+## 12. CLI, Demo, and HuggingFace Publishing
 
 ### 12.1 CLI (`cli.py`)
 
@@ -1086,6 +1254,52 @@ When the user types text and clicks "Classify", Gradio calls our `classify()`
 function and displays the results as labeled probability bars.
 
 The demo includes 8 example sentences that users can click to try.
+
+### 12.3 Data Analysis (`data_analysis.py`)
+
+Running `python data_analysis.py` regenerates 10 analysis plots in
+`analysis/` plus a dataset-level statistics JSON. The plots cover:
+
+- `class_distribution.png` — bar chart of label counts for each dataset.
+- `text_length_distribution.png` — word-count histograms per task.
+- `top_words_per_class.png` — top-k distinctive words per label.
+- `lexicon_coverage.png` — how much of the LM lexicon is triggered per class.
+- `model_comparison.png` — side-by-side macro-F1 for every model × task.
+- `per_class_f1_heatmap.png` — per-class F1 matrix across all models.
+- `performance_progression.png` — lexicon → TF-IDF → FinBERT → multi-task story arc.
+- `multitask_improvement.png` — delta between single-task and multi-task FinBERT.
+- `domain_pretraining_gap.png` — few-shot FinBERT vs BERT vs RoBERTa.
+- `task_difficulty_gap.png` — stance-vs-sentiment macro-F1 by model family.
+
+These feed directly into the report and slide deck.
+
+### 12.4 Publishing Models to HuggingFace Hub (`push_to_hf.py`)
+
+Once models have been trained, `python push_to_hf.py` uploads them to
+HuggingFace Hub under the `Louisnguyen/*` namespace. It pushes:
+
+| Local directory | Remote repo |
+|-----------------|-------------|
+| `models/finbert_stance/`    | `Louisnguyen/finbert-financial-stance` |
+| `models/finbert_sentiment/` | `Louisnguyen/finbert-financial-sentiment` |
+| `models/bert_llrd_stance/`    | `Louisnguyen/bert-llrd-financial-stance` |
+| `models/bert_llrd_sentiment/` | `Louisnguyen/bert-llrd-financial-sentiment` |
+| `models/multitask_finbert/` | `Louisnguyen/multitask-finbert-financial` |
+
+It also attaches the relevant `results/*.json` file to each repo as
+`results.json` so the model card can cite the exact metrics.
+
+**Requires** `HF_TOKEN` in the environment:
+```bash
+export HF_TOKEN=hf_...
+python push_to_hf.py
+```
+
+### 12.5 Report / Slide Deck Builder (`create_presentation.py`)
+
+Generates the final report/slide artefacts by combining the plots from
+`analysis/`, the metrics in `results/all_results_summary.json`, and the
+written narrative. It is idempotent — safe to re-run after new experiments.
 
 ---
 
@@ -1195,52 +1409,67 @@ to isolate the project from the system Python.
 
 ### 14.1 Complete Results Table
 
+Numbers below come directly from `results/all_results_summary.json`.
+
 | Model | Stance Acc | Stance F1 | Sent. Acc | Sent. F1 |
 |-------|-----------|-----------|-----------|----------|
-| LM Lexicon (rules) | 0.4153 | 0.3885 | 0.6932 | 0.5315 |
-| TF-IDF + LR | 0.6089 | 0.5873 | 0.8720 | 0.8232 |
-| TF-IDF + LM Lexicon | 0.6109 | 0.5863 | 0.8543 | 0.8050 |
-| FinBERT (zero-shot) | 0.4980 | 0.4874 | 0.9735 | 0.9650 |
-| FinBERT (few-shot k=16) | 0.4859 | 0.4534 | 0.9779 | 0.9670 |
-| BERT-base (few-shot k=16) | 0.3851 | 0.3744 | 0.7417 | 0.6500 |
-| RoBERTa-base (few-shot k=16) | 0.3730 | 0.3600 | 0.7682 | 0.6722 |
-| FinBERT (fine-tuned) | 0.6371 | 0.6194 | 0.9669 | 0.9459 |
-| **Multi-task FinBERT** | **0.6593** | **0.6478** | **0.9801** | **0.9666** |
+| LM Lexicon (rules)            | 0.4153 | 0.3885 | 0.6932 | 0.5315 |
+| TF-IDF + LR                   | 0.6089 | 0.5873 | 0.8720 | 0.8232 |
+| TF-IDF + SVM                  | 0.6331 | 0.6061 | 0.8940 | 0.8534 |
+| TF-IDF (trigrams) + LR        | 0.6109 | 0.5914 | 0.8786 | 0.8310 |
+| TF-IDF + LM Lexicon           | 0.6109 | 0.5863 | 0.8543 | 0.8050 |
+| FinBERT (zero-shot)           | 0.4980 | 0.4874 | 0.9735 | 0.9650 |
+| FinBERT (few-shot k=16)       | 0.4859 | 0.4552 | 0.9801 | 0.9690 |
+| BERT-base (few-shot k=16)     | 0.3790 | 0.3694 | 0.7461 | 0.6599 |
+| RoBERTa-base (few-shot k=16)  | 0.3589 | 0.3489 | 0.7572 | 0.6439 |
+| FinBERT (fine-tuned)          | 0.6129 | 0.5988 | 0.9669 | 0.9467 |
+| BERT-base LLRD + Gradual UF   | 0.6512 | 0.6371 | 0.9691 | 0.9533 |
+| **Multi-task FinBERT**        | **0.6774** | **0.6684** | **0.9845** | **0.9772** |
 
 ### 14.2 Key Observations
 
-**1. Domain-specific pre-training is the single most important factor.**
-FinBERT (few-shot, only 48 examples) achieves 96.7% F1 on sentiment,
-beating BERT-base (65.0%) and RoBERTa-base (67.2%) with the same data.
+**1. Domain-specific pre-training is the single most important factor for
+sentiment.**
+FinBERT (few-shot, only 48 examples) achieves 96.9% F1 on sentiment,
+beating BERT-base (66.0%) and RoBERTa-base (64.4%) with the same data.
 This is a 30+ percentage point gap from domain pre-training alone.
 
 **2. Stance is fundamentally harder than sentiment.**
-Even our best model achieves only 64.8% F1 on stance vs 96.7% on sentiment.
+Even our best model achieves only 66.8% F1 on stance vs 97.7% on sentiment.
 Stance requires understanding **implied monetary policy positions** — subtle
 reasoning that goes beyond surface-level word meaning.
 
-**3. Multi-task learning helps both tasks.**
+**3. Multi-task learning helps both tasks — by a lot on stance.**
 The multi-task model beats single-task fine-tuning on both tasks:
-- Stance: +2.8% F1 (0.6194 → 0.6478)
-- Sentiment: +2.1% F1 (0.9459 → 0.9666)
+- Stance: +7.0% F1 (0.5988 → 0.6684)
+- Sentiment: +3.1% F1 (0.9467 → 0.9772)
 
 This confirms that financial stance and sentiment are related tasks that
-benefit from shared representations.
+benefit from shared representations. The stance gain is especially large
+because FOMC has fewer labelled examples — the sentiment task is effectively
+providing auxiliary supervision signal for the shared encoder.
 
-**4. The TF-IDF baseline is surprisingly strong for sentiment.**
-87.2% accuracy with a bag-of-words model suggests financial sentiment often
-boils down to keyword presence. Neural models add value mainly on ambiguous
-cases.
+**4. LLRD + Gradual Unfreezing is a real alternative to domain pretraining.**
+On **stance**, BERT-base with LLRD (F1 = 0.6371) actually outperforms
+single-task FinBERT (F1 = 0.5988). A general-purpose model with the right
+fine-tuning recipe can beat a domain-specific model that uses a standard
+fine-tuning recipe, at least on tasks where the domain pretraining didn't
+directly see the label distribution.
 
-**5. Zero-shot FinBERT excels at sentiment but fails at stance.**
+**5. TF-IDF + SVM is the best non-neural baseline, and it is strong.**
+89.4% accuracy on sentiment with a TF-IDF+SVM pipeline suggests financial
+sentiment often boils down to keyword presence. Neural models add value
+mainly on ambiguous cases.
+
+**6. Zero-shot FinBERT excels at sentiment but fails at stance.**
 FinBERT was trained for sentiment, not stance. Using sentiment labels as
 stance proxies (positive→hawkish) achieves only 49.8% — barely above
 random (33.3%). This proves stance and sentiment are distinct tasks.
 
-**6. Few-shot BERT/RoBERTa perform worse than the TF-IDF baseline.**
+**7. Few-shot BERT/RoBERTa perform worse than the TF-IDF baselines.**
 With only 48 training examples, the frozen transformer embeddings don't
-capture enough task-specific signal. The TF-IDF baseline, trained on 1700+
-examples, beats them handily. This shows that more training data can
+capture enough task-specific signal. The TF-IDF+SVM baseline, trained on
+1700+ examples, beats them handily. This shows that more training data can
 compensate for a simpler model.
 
 ### 14.3 Model Progression Story
@@ -1248,15 +1477,18 @@ compensate for a simpler model.
 The results tell a clear progression story:
 
 ```
-Rules only (lexicon)        → ~40% F1 (no learning)
-Statistical baseline (LR)   → ~59% F1 (learns from data)
-Domain model, few data       → ~45% F1 (right model, too little data)
-Domain model, full data      → ~62% F1 (right model, right data)
-Multi-task domain model      → ~65% F1 (right model, more data, shared learning)
+Rules only (lexicon)               → 0.39 / 0.53  (stance / sentiment F1)
+Statistical baseline (LR)          → 0.59 / 0.82  (learns from data)
+Stronger classical (SVM)           → 0.61 / 0.85  (bigger margin model)
+Domain model, few data             → 0.46 / 0.97  (right model for sentiment,
+                                                  not enough data for stance)
+Domain model, full fine-tune       → 0.60 / 0.95  (right model, right data)
+General model + LLRD+Unfreezing    → 0.64 / 0.95  (careful recipe closes gap)
+Multi-task domain model            → 0.67 / 0.98  (shared learning tops all)
 ```
 
 Each step adds something: learning capability → domain knowledge → more data
-→ shared multi-task signal.
+→ disciplined fine-tuning → shared multi-task signal.
 
 ---
 
@@ -1265,20 +1497,27 @@ Each step adds something: learning capability → domain knowledge → more data
 ### For NLP Practitioners
 
 1. **Always start with a baseline.** TF-IDF + LR takes 5 seconds to train
-   and tells you how hard the problem is.
+   and tells you how hard the problem is. TF-IDF + SVM usually improves it
+   for free and is worth trying before any neural model.
 
-2. **Domain pre-training > model size.** FinBERT (110M params) on financial
-   tasks beats general BERT/RoBERTa (110-125M params). Use domain-specific
-   models when they exist.
+2. **Domain pre-training > model size, *for tasks the domain model was
+   trained on*.** FinBERT dominates sentiment but only modestly outperforms
+   BERT-base on stance — the domain advantage shrinks when the target task
+   is outside the pretraining objective.
 
-3. **Multi-task learning is free performance.** If you have related tasks,
-   training them jointly costs nothing extra and improves both.
+3. **Disciplined fine-tuning can offset a missing domain prior.** BERT-base
+   with LLRD + Gradual Unfreezing beats single-task FinBERT on stance, by
+   simply fine-tuning more carefully.
 
-4. **Class imbalance must be addressed.** Without weighted loss, the stance
+4. **Multi-task learning is free performance.** If you have related tasks,
+   training them jointly costs nothing extra and improves both, with the
+   larger gain going to the task that has less data.
+
+5. **Class imbalance must be addressed.** Without weighted loss, the stance
    model predicts "neutral" for most inputs (easy to get 49% accuracy,
    hard to get high F1).
 
-5. **Evaluation metrics matter.** Accuracy can be misleading with imbalanced
+6. **Evaluation metrics matter.** Accuracy can be misleading with imbalanced
    classes. Always report per-class F1 and macro-F1.
 
 ### For This Course
@@ -1885,7 +2124,7 @@ both datasets, and few-shot for 3 models × 2 tasks = 8 experiments.
 
 ---
 
-### 16.7 `src/finetune.py` — FinBERT Fine-Tuning
+### 16.7 `src/finetune_fineBert.py` — FinBERT Single-Task Fine-Tuning
 
 #### `class TextClassificationDataset(TorchDataset)`
 
@@ -2037,7 +2276,53 @@ with torch.no_grad():   # disable gradient computation
 
 ---
 
-### 16.8 `src/multitask.py` — Multi-Task Learning
+### 16.8 `src/finetune_bert.py` — BERT-base LLRD + Gradual Unfreezing
+
+#### `_build_layer_groups(model)`
+
+**Purpose**: Partition `model` parameters into 14 ordered groups, top → bottom.
+Index 0 is the classifier head + BERT pooler; indices 1–12 are encoder
+layers 11..0; index 13 is the token/position/type embeddings.
+
+For each group it computes the LLRD-scaled LR:
+```python
+lr = LLRD_BASE_LR * (LLRD_DECAY ** (depth + 1))
+```
+where `depth` is how far below the head the group sits. The head itself gets
+the full `LLRD_BASE_LR = 2e-5`; every layer below is multiplied by 0.9.
+
+#### `_build_optimizer(model, epoch)`
+
+**Purpose**: Build a fresh AdamW optimizer each epoch to implement **gradual
+unfreezing**. Freezes everything first, then unfreezes the top `min(epoch, 14)`
+groups. Only active groups go into the optimizer's `param_groups`.
+
+Key trick — no weight decay on the head (`wd = 0.0`) so bias-heavy classifier
+logits aren't shrunk by L2; every other group uses `WEIGHT_DECAY = 0.01`.
+
+#### `_train_one_epoch(model, loader, criterion, optimizer, device)`
+
+**Purpose**: Standard training loop for one epoch, with gradient clipping at
+`max_norm=1.0` to protect against exploding gradients when a newly-unfrozen
+layer group starts updating.
+
+#### `finetune_bert_llrd(train_split, val_split, test_split, label_names, task_name)`
+
+**Purpose**: Main entry point. For `task_name == "stance"` it builds a
+label-smoothed, *class-weighted* cross-entropy loss; for sentiment it uses
+plain label-smoothed CE.
+
+The training log prints one row per epoch showing: epoch number, name of the
+deepest active group, number of trainable parameters, training loss,
+validation accuracy, validation macro-F1. Best checkpoint (by val macro-F1)
+is kept in memory and restored before test evaluation.
+
+On completion the function saves:
+- `models/bert_llrd_{task}/` — HuggingFace-format model + tokenizer
+- `results/finetune_bert_llrd_{task}.json` — test metrics
+- `results/BERT_base_LLRD_{task}_cm.png` — confusion matrix
+
+### 16.9 `src/multitask.py` — Multi-Task Learning
 
 #### `class MultiTaskFinBERT(nn.Module)`
 
@@ -2123,11 +2408,21 @@ Same as `_get_predictions` but passes `task` to `model(...)`.
 
 ---
 
-### 16.9 `run_experiments.py` — Experiment Orchestration
+### 16.10 `run_experiments.py` — Experiment Orchestration
 
-#### `step1_load_data()` through `step5_multitask()`
+#### `step1_load_data()` through `step6_finetune_bert_llrd()`
 
-Each step function calls the correct module. No complex logic.
+Each step function calls the correct module:
+
+| Step | Function | Module |
+|------|----------|--------|
+| 1 | `step1_load_data` | `src.data_loader` |
+| 2 | `step2_baseline` | `src.baseline` (LR + SVM + trigram-LR) |
+| 2b | `step2b_lexicon` | `src.lexicon` |
+| 3 | `step3_pretrained` | `src.pretrained_eval` |
+| 4 | `step4_finetune` | `src.finetune_fineBert` |
+| 5 | `step5_multitask` | `src.multitask` |
+| 6 | `step6_finetune_bert_llrd` | `src.finetune_bert` |
 
 #### `print_summary(all_results)`
 
@@ -2145,11 +2440,12 @@ parser = argparse.ArgumentParser(...)
 parser.add_argument("--step", type=int, default=0)
 # --step 0 (default) = run everything
 # --step 2 = only run baseline + lexicon
+# --step 6 = only run BERT LLRD fine-tuning
 ```
 
 ---
 
-### 16.10 `cli.py` — Command-Line Interface
+### 16.11 `cli.py` — Command-Line Interface
 
 #### `load_multitask_model()`
 
@@ -2216,7 +2512,7 @@ bar = "█" * int(score * 30)
 
 ---
 
-### 16.11 `demo.py` — Gradio Demo
+### 16.12 `demo.py` — Gradio Demo
 
 #### `load_model()`
 
@@ -2271,5 +2567,46 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
 
 ---
 
-*Document generated for COMP6713 2026 T1. All code, experiments, and analysis
-are reproducible using `python run_experiments.py`.*
+### 16.13 `push_to_hf.py` — HuggingFace Hub Publishing
+
+#### `push_hf_format_model(local_name, repo_name)`
+
+Uploads a HuggingFace-format model directory (i.e., one saved via
+`model.save_pretrained(...)`) to `Louisnguyen/{repo_name}`. Also uploads
+the matching `results/*.json` as `results.json` so the model card can
+reference the exact evaluation metrics.
+
+Covers: `finbert_stance`, `finbert_sentiment`,
+`bert_llrd_stance`, `bert_llrd_sentiment`.
+
+#### `push_multitask_model(local_name, repo_name)`
+
+Multi-task model is saved as a custom `torch.save(model.state_dict(),
+"model.pt")` (see `src/multitask.py`), not as a HF-format model, so it
+needs a separate upload path. Uploads the raw `model.pt` + tokenizer
+files + `results/multitask_*.json`.
+
+#### Environment variable
+
+`HF_TOKEN` must be set; the script reads it via `os.environ.get("HF_TOKEN")`.
+
+---
+
+### 16.14 `data_analysis.py` — Dataset and Result Plots
+
+Produces 10 PNG plots in `analysis/` (see Section 12.3 for the list) and
+a JSON dump of dataset-level statistics. It reads results from
+`results/all_results_summary.json` and datasets via
+`src.data_loader`, so it assumes training has already run.
+
+### 16.15 `create_presentation.py` — Report / Slide Deck Builder
+
+Assembles the final report artefacts from the plots in `analysis/`, the
+numeric results in `results/`, and the written narrative. Re-runnable after
+any experiment; outputs land in `presentation/` and `report/`.
+
+---
+
+*Document regenerated for COMP6713 2026 T1. All code, experiments, and
+analysis are reproducible using `python run_experiments.py` (steps 1–6),
+followed by `python data_analysis.py` and optionally `python push_to_hf.py`.*

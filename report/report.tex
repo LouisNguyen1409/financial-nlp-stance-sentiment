@@ -42,7 +42,7 @@
 
 \begin{table*}[t]
 \centering
-\caption{Project Scope (COMP6713 2026 T1). Minimum 80 credits required; achieved \textbf{135+ credits}.}
+\caption{Project Scope (COMP6713 2026 T1). Minimum 80 credits required; achieved \textbf{155+ credits}.}
 \label{tab:scope}
 \small
 \begin{tabular}{@{}p{3.2cm}p{1.5cm}p{5cm}p{5.5cm}@{}}
@@ -57,17 +57,20 @@ Text Domain (x2) & 5 each & Central bank comms + Financial news & FOMC meeting m
 2 existing datasets & 10 & Publicly available & FOMC Hawkish-Dovish (2,480) + Financial PhraseBank (2,264) \\
 1 existing lexicon & 10 & Domain lexicon & Loughran-McDonald Financial Sentiment Dictionary \\
 \midrule
-\multicolumn{4}{@{}l}{\textbf{Part C: Modelling} (min. 30 credits) \hfill \textit{Achieved: 65+}} \\
+\multicolumn{4}{@{}l}{\textbf{Part C: Modelling} (min. 30 credits) \hfill \textit{Achieved: 80+}} \\
 Baseline & req. & Simple baseline & TF-IDF + Logistic Regression \\
+Alternative baselines & 5+ & Additional non-neural models & TF-IDF+SVM (LinearSVC), TF-IDF(trigrams)+LR, TF-IDF+LM Lexicon, GloVe+LR/SVM \\
 Pre-trained models (x3) & 5 each & Compare multiple & FinBERT, BERT-base, RoBERTa-base (zero/few-shot) \\
 Fine-tune a model & 20 & Out-of-box fine-tuning & FinBERT fine-tuned on each dataset \\
-Extend a method & 30 & Novel extension & Multi-task FinBERT (shared encoder + dual heads + weighted CE) \\
+Extend a method & 30 & Novel extension & Multi-task FinBERT (shared encoder + dual heads + weighted CE, alternating batches) \\
+Second extension & 15+ & Advanced fine-tuning recipe & BERT-base with Layer-wise LR Decay + Gradual Unfreezing + label smoothing \\
 \midrule
-\multicolumn{4}{@{}l}{\textbf{Part D: Evaluation} (min. 20 credits) \hfill \textit{Achieved: 30}} \\
+\multicolumn{4}{@{}l}{\textbf{Part D: Evaluation} (min. 20 credits) \hfill \textit{Achieved: 35}} \\
 Quantitative eval & 10 & Appropriate metrics & Per-class F1, macro-F1, accuracy, confusion matrices \\
 Qualitative eval & 5 & Error analysis & Misclassification patterns, ambiguous sentence analysis \\
 Command line testing & 5 & CLI interface & \texttt{cli.py} with --text, --file, interactive modes \\
 Demo & 10 & Gradio interface & Web UI with stance + sentiment predictions \\
+Public model release & 5 & HuggingFace Hub & 5 model repos under \texttt{Louisnguyen/*} via \texttt{push\_to\_hf.py} \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -148,8 +151,9 @@ Our contributions are as follows:
 
 \textbf{Financial sentiment analysis} has progressed from dictionary-based
 methods \cite{loughran2011liability} to transformer-based models.
-Malo et al.\ introduced the Financial PhraseBank, demonstrating that
-annotator agreement strongly affects benchmark quality.  Pre-trained
+Malo et al.\ \cite{malo2014good} introduced the Financial PhraseBank,
+demonstrating that annotator agreement strongly affects benchmark
+quality.  Pre-trained
 language models such as BERT \cite{devlin2019bert} have been adapted
 to financial text through continued pre-training on financial corpora,
 producing models such as FinBERT \cite{araci2019finbert,yang2020finbert},
@@ -232,17 +236,27 @@ To understand the sensitivity of results to modelling choices, we
 evaluate several variants:
 \begin{itemize}[leftmargin=*,nosep]
     \item \textbf{TF-IDF + SVM}: Replaces logistic regression with a
-          support vector machine using an RBF kernel, which can capture
-          non-linear boundaries in the TF-IDF feature space.
+          linear support vector machine (\texttt{LinearSVC},
+          $C{=}1.0$), whose hinge-loss objective focuses on the support
+          vectors near the decision boundary and typically gives a
+          small but consistent lift over logistic regression on
+          high-dimensional sparse TF-IDF features.
     \item \textbf{TF-IDF (trigrams) + LR}: Extends the TF-IDF
           vocabulary to include trigrams, capturing longer phrases at
           the cost of higher dimensionality.
     \item \textbf{TF-IDF + LM Lexicon features}: Augments TF-IDF
           vectors with counts from the Loughran-McDonald dictionary,
           injecting domain knowledge into the feature space.
-    \item \textbf{GloVe + LR / SVM}: Replaces TF-IDF with 300-dimensional
-          GloVe embeddings averaged over tokens, providing
+    \item \textbf{GloVe + LR / SVM}: Replaces TF-IDF with 100-dimensional
+          GloVe \cite{pennington2014glove} embeddings
+          (\texttt{glove.6B.100d}) averaged over tokens, providing
           semantically richer but lower-dimensional representations.
+          GloVe was produced by a separate local script (run with the
+          pre-trained embedding file \texttt{data/glove.6B.100d.txt},
+          which is gitignored due to size); its metrics in
+          Tables~\ref{tab:sentiment} and~\ref{tab:stance} are loaded
+          from the committed JSON artefacts in
+          \texttt{results/glove\_*.json}.
 \end{itemize}
 
 \subsection{Pre-Trained Transformer Evaluation}
@@ -257,7 +271,7 @@ an imperfect but informative mapping.
 
 \subsubsection{Few-Shot Classification ($k{=}16$)}
 We sample $k{=}16$ labelled examples per class and fine-tune three models:
-FinBERT, BERT-base, and RoBERTa-base.  This setting tests how
+FinBERT, BERT-base, and RoBERTa-base \cite{liu2019roberta}.  This setting tests how
 efficiently each model can learn from minimal supervision and reveals
 the advantage of domain-specific pre-training.
 
@@ -273,7 +287,7 @@ under-represented classes.
 \subsubsection{BERT-base with LLRD and Gradual Unfreezing}
 To investigate whether a general-purpose model can match domain-specific
 pre-training, we fine-tune BERT-base with two advanced training
-strategies:
+strategies popularised by ULMFiT~\cite{howard2018ulmfit}:
 \begin{itemize}[leftmargin=*,nosep]
     \item \textbf{Layer-wise Learning Rate Decay (LLRD)}: Lower layers
           (encoding general linguistic knowledge) receive smaller
@@ -286,7 +300,9 @@ strategies:
     \item \textbf{Label smoothing} ($\alpha{=}0.1$): Softens the target
           distribution, improving calibration and reducing overfitting.
 \end{itemize}
-Training runs for 10 epochs with early stopping on validation macro-F1.
+Training runs for 10 epochs; at each epoch one additional layer group
+is unfrozen, and the checkpoint with the highest validation macro-F1
+is retained for test evaluation.
 
 \subsection{Multi-Task FinBERT}
 \label{sec:multitask}
@@ -299,8 +315,10 @@ training signals.
 
 \textbf{Architecture.}  The model consists of a shared FinBERT encoder
 followed by two independent classification heads (one for stance and
-one for sentiment).  Each head is a two-layer feedforward network with
-dropout, taking the \texttt{[CLS]} token representation as input.
+one for sentiment).  Each head is a single linear layer
+(\texttt{nn.Linear(768, 3)}) applied to the \texttt{[CLS]} token
+representation, with a shared dropout ($p{=}0.1$) inserted between the
+encoder output and the heads.
 
 \textbf{Training procedure.}  We use alternating mini-batches: each
 training step samples a batch from one task, computes the task-specific
@@ -338,9 +356,9 @@ We evaluate all models using:
 \subsection{Implementation Details}
 All transformer models use the HuggingFace \texttt{transformers}
 library.  Classical ML baselines use \texttt{scikit-learn}.  GloVe
-embeddings are 300-dimensional vectors pre-trained on Common Crawl.
-Experiments are conducted on a single NVIDIA GPU.  Random seeds are
-fixed for reproducibility.
+embeddings are 100-dimensional vectors from the Wikipedia + Gigaword
+6B corpus (\texttt{glove.6B.100d}).  Experiments are conducted on a
+single NVIDIA H200 GPU.  Random seeds are fixed for reproducibility.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Results}
@@ -435,7 +453,7 @@ The FOMC dataset exhibits notable class imbalance: \textbf{49.4\%} of
 sentences are neutral, with hawkish (24.4\%) and dovish (26.2\%)
 forming smaller portions.  The Financial PhraseBank shows a similar
 pattern with neutral dominating at 61.4\%, followed by positive (25.2\%)
-and negative (13.4\%).  This imbalance motivates our use of weighted
+and negative (13.5\%).  This imbalance motivates our use of weighted
 cross-entropy loss during training.
 
 \subsection{Text Length Characteristics}
@@ -559,9 +577,10 @@ unfreezing achieves 65.12\% accuracy on stance, surpassing
 FinBERT's single-task fine-tuned result of 61.29\%.  This shows that
 careful training strategies (layer-wise learning rate decay, gradual
 unfreezing, label smoothing) can compensate for the lack of
-domain-specific pre-training.  On sentiment, BERT-base LLRD matches
-FinBERT fine-tuned at 96.91\%, confirming that the training regime
-matters as much as the starting checkpoint for well-aligned tasks.
+domain-specific pre-training.  On sentiment, BERT-base LLRD reaches
+96.91\% accuracy, slightly edging out FinBERT fine-tuned (96.69\%)
+and confirming that the training regime matters as much as the
+starting checkpoint for well-aligned tasks.
 
 \subsection{Traditional Baselines}
 
@@ -574,7 +593,7 @@ actually \emph{hurts} TF-IDF performance, likely because the lexicon
 introduces noise when its categories do not align perfectly with the
 task labels.
 
-GloVe-based models underperform TF-IDF, averaging the embeddings of all
+GloVe-based models underperform TF-IDF: averaging the embeddings of all
 tokens loses the discriminative power of rare but informative words that
 TF-IDF naturally upweights.
 
@@ -584,38 +603,43 @@ TF-IDF naturally upweights.
 We conduct a qualitative analysis of misclassified examples from the
 multi-task FinBERT model.
 
-\subsubsection{Stance Errors: Neutral vs.\ Hawkish Confusion}
-The most common error pattern on the FOMC dataset is confusion between
-neutral and hawkish sentences.  Many FOMC communications use hedged
-language that conveys a hawkish lean without explicit hawkish keywords.
-For example:
+\subsubsection{Stance Errors: Neutral--Leaning Confusion}
+The top-20 stance errors dumped to
+\texttt{results/all\_results\_summary.json} are dominated by
+confusion between neutral and one of the leaning classes.
+Representative examples (truncated as stored in the error log)
+include:
 
-\begin{quote}
-\small
-``\emph{Participants noted that inflation expectations remained well
-anchored, although several observed that the recent data warranted
-close monitoring.}''
-\end{quote}
+\begin{itemize}[leftmargin=*,nosep]
+    \item \emph{``With an increase in the target range at this
+          m\dots{}''} --- true \emph{hawkish}, predicted
+          \emph{neutral}.  The sentence reports a policy action in
+          factual language, so the hawkish implication is structural
+          rather than lexical.
+    \item \emph{``In light of increased uncertainties and muted
+          \dots{}''} --- true \emph{dovish}, predicted
+          \emph{hawkish}.  The model over-weights ``uncertainties''
+          while the following ``muted inflation pressures'' is the
+          actual dovish cue.
+    \item \emph{``Looking ahead, reports from retailer contacts
+          \dots{}''} --- true \emph{neutral}, predicted \emph{dovish}.
+          The sentence introduces a data-gathering pass, with no
+          real stance.
+\end{itemize}
 
-This sentence has a subtle hawkish undertone (``warranted close
-monitoring''), but the model classifies it as neutral because the
-majority of the sentence discusses stable expectations.  Such errors
-are difficult to resolve without richer contextual modelling (e.g.,
-document-level features or discourse structure).
+These errors are difficult to resolve without richer contextual
+modelling (e.g., document-level features or discourse structure).
 
-\subsubsection{Sentiment Errors: Neutral vs.\ Positive Ambiguity}
-On the Financial PhraseBank, the few errors tend to involve factual
-statements with mildly positive implications:
-
-\begin{quote}
-\small
-``\emph{The company reported revenue of \$3.2 billion, in line with
-analyst estimates.}''
-\end{quote}
-
-Meeting estimates is arguably neutral, but some annotators may
-interpret ``in line'' as mildly positive.  The model occasionally
-misclassifies these borderline cases.
+\subsubsection{Sentiment Errors}
+Only 7 sentiment errors remain on a 453-sentence test set.  Among
+them, the most common pattern is \emph{positive}~$\to$~\emph{negative}
+on comparative profit/loss statements that contain both positive and
+negative cues (e.g., ``\emph{Net profit was 35.5 mln compared with
+29.8 mln}'' --- an unambiguous improvement that the model reads as a
+loss signal).  A secondary pattern is \emph{neutral}~$\to$~\emph{positive}
+on business-expansion announcements where the model over-reads
+optimism from terms like ``transferred'' or ``deliver.''  The full
+list of seven sentences is included in the error log.
 
 \subsection{Effect of Weighted Cross-Entropy}
 

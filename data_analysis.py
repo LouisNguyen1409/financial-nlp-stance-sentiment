@@ -212,8 +212,6 @@ def plot_model_comparison():
         ("TF-IDF+SVM", "tfidf_svm"),
         ("TF-IDF(tri)+LR", "tfidf_trigram_lr"),
         ("TF-IDF+Lexicon", "lexicon_tfidf"),
-        ("GloVe+LR", "glove_lr"),
-        ("GloVe+SVM", "glove_svm"),
         ("FinBERT 0-shot", "zeroshot_finbert_native"),
         ("FinBERT few-shot", "fewshot_finbert"),
         ("BERT few-shot", "fewshot_bert-base-uncased"),

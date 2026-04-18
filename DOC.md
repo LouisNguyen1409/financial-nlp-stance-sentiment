@@ -95,7 +95,7 @@ The key question is: **how do we turn text into numbers?** Different approaches:
 |----------|-------------|-----|
 | Bag of Words | Count word frequencies | 1990s |
 | TF-IDF | Weighted word frequencies | 2000s |
-| Word Embeddings | Dense vectors per word (Word2Vec, GloVe) | 2013+ |
+| Word Embeddings | Dense vectors per word (Word2Vec) | 2013+ |
 | Transformers | Contextual embeddings (BERT, GPT) | 2018+ |
 
 ### 2.2 TF-IDF (Term Frequency–Inverse Document Frequency)

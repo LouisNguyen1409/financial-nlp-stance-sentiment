@@ -100,7 +100,7 @@ Câu hỏi chính là: **làm sao biến văn bản thành số?** Các phương
 |-------------|----------------|---------|
 | Túi từ (Bag of Words) | Đếm tần suất từ | Thập niên 1990 |
 | TF-IDF | Tần suất từ có trọng số | Thập niên 2000 |
-| Word Embeddings | Vectơ dày đặc cho mỗi từ (Word2Vec, GloVe) | 2013+ |
+| Word Embeddings | Vectơ dày đặc cho mỗi từ (Word2Vec) | 2013+ |
 | Transformers | Biểu diễn ngữ cảnh (BERT, GPT) | 2018+ |
 
 ### 2.2 TF-IDF (Tần Suất Thuật Ngữ – Tần Suất Tài Liệu Nghịch Đảo)

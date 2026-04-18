@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.24)  18 APR 2026 15:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.3.24)  18 APR 2026 21:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -670,80 +670,75 @@ ocal/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
 
 ] [2]
-Underfull \hbox (badness 1968) in paragraph at lines 250--260
-[]\T1/ptm/b/n/10 (+20) GloVe + LR / SVM\T1/ptm/m/n/10 (+20) : Re-places TF-IDF 
-with 100-
- []
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 263.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 273.
+(hyperref)                removing `math shift' on input line 263.
 
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 273.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 357--362
+Underfull \hbox (badness 10000) in paragraph at lines 347--351
 []\T1/ptm/m/n/10 (+20) All trans-former mod-els use the Hug-ging-Face
  []
 
 
-Underfull \hbox (badness 6575) in paragraph at lines 357--362
+Underfull \hbox (badness 6575) in paragraph at lines 347--351
 \T1/pcr/m/n/10 transformers \T1/ptm/m/n/10 (+20) li-brary. Clas-si-cal ML base-
 lines use
  []
 
 
-Underfull \hbox (badness 5008) in paragraph at lines 357--362
-\T1/ptm/m/n/10 (+20) vec-tors from the Wikipedia + Gi-ga-word 6B cor-pus
+Underfull \hbox (badness 10000) in paragraph at lines 347--351
+\T1/pcr/m/n/10 scikit-learn\T1/ptm/m/n/10 (+20) . Ex-per-i-ments are con-ducted
+ on a
  []
 
 
-Underfull \hbox (badness 4569) in paragraph at lines 357--362
-\T1/ptm/m/n/10 (+20) (\T1/pcr/m/n/10 glove.6B.100d\T1/ptm/m/n/10 (+20) ). Ex-pe
-r-i-ments are con-ducted on a
+Underfull \hbox (badness 2799) in paragraph at lines 347--351
+\T1/ptm/m/n/10 (+20) sin-gle NVIDIA H200 GPU. Ran-dom seeds are fixed
  []
 
 [3]
-<../analysis/performance_progression.png, id=221, 996.6033pt x 417.7206pt>
+<../analysis/performance_progression.png, id=217, 996.6033pt x 417.7206pt>
 File: ../analysis/performance_progression.png Graphic file (type png)
 <use ../analysis/performance_progression.png>
 Package pdftex.def Info: ../analysis/performance_progression.png  used on input
- line 496.
+ line 481.
 (pdftex.def)             Requested size: 252.0pt x 105.62181pt.
-<../analysis/domain_pretraining_gap.png, id=223, 998.0487pt x 367.49295pt>
+<../analysis/domain_pretraining_gap.png, id=219, 998.0487pt x 367.49295pt>
 File: ../analysis/domain_pretraining_gap.png Graphic file (type png)
 <use ../analysis/domain_pretraining_gap.png>
 Package pdftex.def Info: ../analysis/domain_pretraining_gap.png  used on input 
-line 505.
+line 490.
 (pdftex.def)             Requested size: 252.0pt x 92.78702pt.
  [4 <../analysis/performance_progression.png> <../analysis/domain_pretraining_g
 ap.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 607--612
+Underfull \hbox (badness 10000) in paragraph at lines 588--593
  \T1/ptm/m/it/10 (+20) 1) Stance Er-rors: Neutral--Leaning Con-fu-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 607--612
+Underfull \hbox (badness 10000) in paragraph at lines 588--593
 \T1/ptm/m/it/10 (+20) sion: [][][] \T1/ptm/m/n/10 (+20) The top-20 stance er-ro
 rs dumped to
  []
 
 
-Overfull \hbox (0.51875pt too wide) in paragraph at lines 620--624
+Overfull \hbox (0.51875pt too wide) in paragraph at lines 601--605
 \T1/ptm/m/n/10 (-20) ``un-cer-tain-ties'' while the fol-low-ing ``muted in-fla-
 tion pres-sures''
  []
 
 [5]
-Underfull \hbox (badness 2277) in paragraph at lines 747--751
+Underfull \hbox (badness 2277) in paragraph at lines 728--732
 []\T1/ptm/m/n/10 (+20) D. Araci, ``Fin-BERT: Fi-nan-cial sen-ti-ment anal-y-sis
 
  []
 
 
-Underfull \hbox (badness 2495) in paragraph at lines 747--751
+Underfull \hbox (badness 2495) in paragraph at lines 728--732
 \T1/ptm/m/n/10 (+20) with pre-trained lan-guage mod-els,'' \T1/ptm/m/it/10 (+20
 ) arXiv preprint
  []
@@ -768,11 +763,11 @@ Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: F5DEA055F50E213D8A41C1EB9D492BAF;7233.
  ) 
 Here is how much of TeX's memory you used:
- 15897 strings out of 474116
- 254000 string characters out of 5743682
+ 15890 strings out of 474116
+ 253871 string characters out of 5743682
  1957187 words of memory out of 5000000
- 37689 multiletter control sequences out of 15000+600000
- 681407 words of font info for 341 fonts, out of 8000000 for 9000
+ 37686 multiletter control sequences out of 15000+600000
+ 681277 words of font info for 339 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,10n,79p,1003b,584s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
@@ -787,10 +782,10 @@ texlive/2024/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/
 -dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2024/texmf-dist/fon
 ts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/u
 rw/times/utmri8a.pfb>
-Output written on report.pdf (6 pages, 429996 bytes).
+Output written on report.pdf (6 pages, 428099 bytes).
 PDF statistics:
- 318 PDF objects out of 1000 (max. 8388607)
- 279 compressed objects within 3 object streams
- 70 named destinations out of 1000 (max. 500000)
+ 314 PDF objects out of 1000 (max. 8388607)
+ 275 compressed objects within 3 object streams
+ 69 named destinations out of 1000 (max. 500000)
  51027 words of extra memory for PDF output out of 51595 (max. 10000000)
 

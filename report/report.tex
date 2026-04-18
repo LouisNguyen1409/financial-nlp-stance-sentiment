@@ -59,7 +59,7 @@ Text Domain (x2) & 5 each & Central bank comms + Financial news & FOMC meeting m
 \midrule
 \multicolumn{4}{@{}l}{\textbf{Part C: Modelling} (min. 30 credits) \hfill \textit{Achieved: 80+}} \\
 Baseline & req. & Simple baseline & TF-IDF + Logistic Regression \\
-Alternative baselines & 5+ & Additional non-neural models & TF-IDF+SVM (LinearSVC), TF-IDF(trigrams)+LR, TF-IDF+LM Lexicon, GloVe+LR/SVM \\
+Alternative baselines & 5+ & Additional non-neural models & TF-IDF+SVM (LinearSVC), TF-IDF(trigrams)+LR, TF-IDF+LM Lexicon \\
 Pre-trained models (x3) & 5 each & Compare multiple & FinBERT, BERT-base, RoBERTa-base (zero/few-shot) \\
 Fine-tune a model & 20 & Out-of-box fine-tuning & FinBERT fine-tuned on each dataset \\
 Extend a method & 30 & Novel extension & Multi-task FinBERT (shared encoder + dual heads + weighted CE, alternating batches) \\
@@ -85,8 +85,8 @@ text-classification tasks: (1) \emph{stance classification}, labelling
 sentences from Federal Open Market Committee (FOMC) communications as
 hawkish, dovish, or neutral; and (2) \emph{sentiment classification}, labelling
 financial news headlines as positive, negative, or neutral.  We
-systematically compare traditional machine-learning baselines (TF-IDF,
-GloVe, lexicon rule-based), zero-shot and few-shot pre-trained
+systematically compare traditional machine-learning baselines (TF-IDF
++ LR/SVM, lexicon rule-based), zero-shot and few-shot pre-trained
 transformers, single-task fine-tuning, and a multi-task learning
 architecture.  Our best system, a \textbf{multi-task FinBERT} model with
 a shared encoder and dual task-specific heads, achieves 98.45\% accuracy
@@ -247,16 +247,6 @@ evaluate several variants:
     \item \textbf{TF-IDF + LM Lexicon features}: Augments TF-IDF
           vectors with counts from the Loughran-McDonald dictionary,
           injecting domain knowledge into the feature space.
-    \item \textbf{GloVe + LR / SVM}: Replaces TF-IDF with 100-dimensional
-          GloVe \cite{pennington2014glove} embeddings
-          (\texttt{glove.6B.100d}) averaged over tokens, providing
-          semantically richer but lower-dimensional representations.
-          GloVe was produced by a separate local script (run with the
-          pre-trained embedding file \texttt{data/glove.6B.100d.txt},
-          which is gitignored due to size); its metrics in
-          Tables~\ref{tab:sentiment} and~\ref{tab:stance} are loaded
-          from the committed JSON artefacts in
-          \texttt{results/glove\_*.json}.
 \end{itemize}
 
 \subsection{Pre-Trained Transformer Evaluation}
@@ -355,10 +345,9 @@ We evaluate all models using:
 
 \subsection{Implementation Details}
 All transformer models use the HuggingFace \texttt{transformers}
-library.  Classical ML baselines use \texttt{scikit-learn}.  GloVe
-embeddings are 100-dimensional vectors from the Wikipedia + Gigaword
-6B corpus (\texttt{glove.6B.100d}).  Experiments are conducted on a
-single NVIDIA H200 GPU.  Random seeds are fixed for reproducibility.
+library.  Classical ML baselines use \texttt{scikit-learn}.
+Experiments are conducted on a single NVIDIA H200 GPU.  Random seeds
+are fixed for reproducibility.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Results}
@@ -385,8 +374,6 @@ TF-IDF + LR                 & 0.8720 & 0.8232 \\
 TF-IDF + SVM                & 0.8940 & 0.8534 \\
 TF-IDF (trigrams) + LR      & 0.8786 & 0.8310 \\
 TF-IDF + LM Lexicon         & 0.8543 & 0.8050 \\
-GloVe + LR                  & 0.7903 & 0.7218 \\
-GloVe + SVM                 & 0.8035 & 0.7249 \\
 \midrule
 \multicolumn{3}{@{}l}{\textit{Pre-trained (no fine-tuning on full data)}} \\
 FinBERT (zero-shot native)   & 0.9735 & 0.9650 \\
@@ -420,8 +407,6 @@ TF-IDF + LR                 & 0.6089 & 0.5873 \\
 TF-IDF + SVM                & 0.6331 & 0.6061 \\
 TF-IDF (trigrams) + LR      & 0.6109 & 0.5914 \\
 TF-IDF + LM Lexicon         & 0.6109 & 0.5863 \\
-GloVe + LR                  & 0.5161 & 0.5040 \\
-GloVe + SVM                 & 0.5544 & 0.5225 \\
 \midrule
 \multicolumn{3}{@{}l}{\textit{Pre-trained (no fine-tuning on full data)}} \\
 FinBERT (zero-shot proxy)    & 0.4980 & 0.4874 \\
@@ -592,10 +577,6 @@ marginal improvement, while adding Loughran-McDonald lexicon features
 actually \emph{hurts} TF-IDF performance, likely because the lexicon
 introduces noise when its categories do not align perfectly with the
 task labels.
-
-GloVe-based models underperform TF-IDF: averaging the embeddings of all
-tokens loses the discriminative power of rare but informative words that
-TF-IDF naturally upweights.
 
 \subsection{Error Analysis}
 \label{sec:errors}
@@ -782,11 +763,6 @@ Y.~Liu, M.~Ott, N.~Goyal, J.~Du, M.~Joshi, D.~Chen, O.~Levy,
 M.~Lewis, L.~Zettlemoyer, and V.~Stoyanov,
 ``RoBERTa: A robustly optimized BERT pretraining approach,''
 \emph{arXiv preprint arXiv:1907.11692}, 2019.
-
-\bibitem{pennington2014glove}
-J.~Pennington, R.~Socher, and C.~D.~Manning,
-``GloVe: Global vectors for word representation,''
-in \emph{Proc.\ EMNLP}, 2014, pp.~1532--1543.
 
 \end{thebibliography}
 

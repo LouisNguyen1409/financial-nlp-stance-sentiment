@@ -27,7 +27,6 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-A}1}Lexicon Rule-Based (LM Lexicon)}{2}{subsubsection.4.1.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-A}2}TF-IDF + Logistic Regression}{2}{subsubsection.4.1.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-A}3}Alternative Baselines}{2}{subsubsection.4.1.3}\protected@file@percent }
-\citation{pennington2014glove}
 \citation{liu2019roberta}
 \citation{howard2018ulmfit}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Pre-Trained Transformer Evaluation}{3}{subsection.4.2}\protected@file@percent }
@@ -46,21 +45,21 @@
 \newlabel{sec:results}{{VI}{3}{Results}{section.6}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {VII}Data Analysis}{3}{section.7}\protected@file@percent }
 \newlabel{sec:data-analysis}{{VII}{3}{Data Analysis}{section.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}Class Distribution}{3}{subsection.7.1}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Sentiment classification results on Financial PhraseBank (100\% annotator agreement).}}{4}{table.caption.2}\protected@file@percent }
 \newlabel{tab:sentiment}{{II}{4}{Sentiment classification results on Financial PhraseBank (100\% annotator agreement)}{table.caption.2}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Stance classification results on FOMC Hawkish-Dovish dataset.}}{4}{table.caption.3}\protected@file@percent }
 \newlabel{tab:stance}{{III}{4}{Stance classification results on FOMC Hawkish-Dovish dataset}{table.caption.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}Class Distribution}{4}{subsection.7.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-B}}Text Length Characteristics}{4}{subsection.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-C}}Lexicon Coverage Analysis}{4}{subsection.7.3}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Performance progression from baselines through multi-task learning. The gap between sentiment (blue) and stance (red) persists across all model families.}}{4}{figure.caption.4}\protected@file@percent }
 \newlabel{fig:progression}{{1}{4}{Performance progression from baselines through multi-task learning. The gap between sentiment (blue) and stance (red) persists across all model families}{figure.caption.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Few-shot (k=16) comparison showing the advantage of domain-specific pre-training. FinBERT dramatically outperforms BERT-base and RoBERTa on sentiment.}}{4}{figure.caption.5}\protected@file@percent }
 \newlabel{fig:domain-gap}{{2}{4}{Few-shot (k=16) comparison showing the advantage of domain-specific pre-training. FinBERT dramatically outperforms BERT-base and RoBERTa on sentiment}{figure.caption.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-C}}Lexicon Coverage Analysis}{4}{subsection.7.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-D}}Discriminative Features}{4}{subsection.7.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {VIII}Analysis of Results}{5}{section.8}\protected@file@percent }
-\newlabel{sec:analysis}{{VIII}{5}{Analysis of Results}{section.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-A}}Sentiment vs.\ Stance: A Tale of Two Tasks}{5}{subsection.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Analysis of Results}{4}{section.8}\protected@file@percent }
+\newlabel{sec:analysis}{{VIII}{4}{Analysis of Results}{section.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-A}}Sentiment vs.\ Stance: A Tale of Two Tasks}{4}{subsection.8.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-B}}The Value of Domain-Specific Pre-Training}{5}{subsection.8.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-C}}Multi-Task Learning Benefits}{5}{subsection.8.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-D}}BERT-base LLRD: Closing the Gap Without Domain Pre-Training}{5}{subsection.8.4}\protected@file@percent }
@@ -69,6 +68,9 @@
 \newlabel{sec:errors}{{\mbox  {VIII-F}}{5}{Error Analysis}{subsection.8.6}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {VIII-F}1}Stance Errors: Neutral--Leaning Confusion}{5}{subsubsection.8.6.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {VIII-F}2}Sentiment Errors}{5}{subsubsection.8.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-G}}Effect of Weighted Cross-Entropy}{5}{subsection.8.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Deployment}{5}{section.9}\protected@file@percent }
+\newlabel{sec:deployment}{{IX}{5}{Deployment}{section.9}{}}
 \bibstyle{plainnat}
 \bibcite{loughran2011liability}{{1}{}{{}}{{}}}
 \bibcite{devlin2019bert}{{2}{}{{}}{{}}}
@@ -79,11 +81,7 @@
 \bibcite{malo2014good}{{7}{}{{}}{{}}}
 \bibcite{howard2018ulmfit}{{8}{}{{}}{{}}}
 \bibcite{liu2019roberta}{{9}{}{{}}{{}}}
-\bibcite{pennington2014glove}{{10}{}{{}}{{}}}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-G}}Effect of Weighted Cross-Entropy}{6}{subsection.8.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {IX}Deployment}{6}{section.9}\protected@file@percent }
-\newlabel{sec:deployment}{{IX}{6}{Deployment}{section.9}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {X}Discussion}{6}{section.10}\protected@file@percent }
 \newlabel{sec:discussion}{{X}{6}{Discussion}{section.10}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {XI}Conclusion}{6}{section.11}\protected@file@percent }

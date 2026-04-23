@@ -85,14 +85,12 @@
 \headcommand {\beamer@appendixpages {30}}
 \headcommand {\slideentry {7}{0}{3}{30/30}{}{1}}
 \headcommand {\beamer@framepages {30}{30}}
-\headcommand {\slideentry {7}{0}{4}{31/31}{}{1}}
-\headcommand {\beamer@framepages {31}{31}}
-\headcommand {\slideentry {7}{0}{4}{31/32}{}{1}}
-\headcommand {\beamer@framepages {31}{32}}
-\headcommand {\beamer@partpages {30}{32}}
-\headcommand {\beamer@subsectionpages {30}{32}}
-\headcommand {\beamer@sectionpages {30}{32}}
-\headcommand {\beamer@documentpages {32}}
+\headcommand {\slideentry {7}{0}{3}{30/31}{}{1}}
+\headcommand {\beamer@framepages {30}{31}}
+\headcommand {\beamer@partpages {30}{31}}
+\headcommand {\beamer@subsectionpages {30}{31}}
+\headcommand {\beamer@sectionpages {30}{31}}
+\headcommand {\beamer@documentpages {31}}
 \headcommand {\gdef \inserttotalframenumber {2}}
 \headcommand {\gdef \inserttotalframenumber {21}}
 \headcommand {\gdef \appendixtotalframenumber {2}}

@@ -63,21 +63,8 @@
 % ============================================================
 % 2. Problem + Datasets
 % ============================================================
-\begin{frame}{Problem \& Datasets}
+\begin{frame}{Datasets \& Problem Statement}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            \textbf{Two 3-class classification tasks:}
-            \begin{itemize}\setlength{\itemsep}{2pt}
-                \item \textbf{Stance} (FOMC monetary policy)\\ \{hawkish, dovish, neutral\}
-                \item \textbf{Sentiment} (financial news)\\ \{positive, negative, neutral\}
-            \end{itemize}
-            \vspace{0.5em}
-            \textbf{Why it matters:}
-            \begin{itemize}\setlength{\itemsep}{2pt}
-                \item Central-bank stance moves markets
-                \item Shared financial vocabulary, different tasks $\Rightarrow$ natural MTL setup
-            \end{itemize}
-        \end{column}
         \begin{column}{0.5\textwidth}
             \textbf{Datasets (70/10/20 stratified, seed 42):}\\[0.4em]
             {\footnotesize
@@ -95,6 +82,58 @@
                 \item FOMC test: 130/121/245 (balanced-ish)
                 \item LM lexicon~\cite{loughran2011liability} for rule-based baseline
             \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \textbf{Problem statement:}\\[0.3em]
+            Given a short financial sentence, predict \emph{both} its monetary-policy stance and its market sentiment under heavy class imbalance and limited labelled data ($<\!2{,}500$ per task).\\[0.6em]
+            \textbf{Two 3-class classification tasks:}
+            \begin{itemize}\setlength{\itemsep}{2pt}
+                \item \textbf{Stance} (FOMC monetary policy)\\ \{hawkish, dovish, neutral\}
+                \item \textbf{Sentiment} (financial news)\\ \{positive, negative, neutral\}
+            \end{itemize}
+            \vspace{0.3em}
+            \textbf{Why it matters:}
+            \begin{itemize}\setlength{\itemsep}{2pt}
+                \item Central-bank stance moves markets
+                \item Shared financial vocabulary, different tasks $\Rightarrow$ natural MTL setup
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ============================================================
+% 3. Baselines & Pre-trained Probes (3 first methods)
+% ============================================================
+\begin{frame}{Baselines \& Pre-trained Probes}
+    \begin{columns}[T]
+        \begin{column}{0.33\textwidth}
+            \textbf{1. LM Lexicon (rule-based)}\\
+            \cite{loughran2011liability}
+            \begin{itemize}\setlength{\itemsep}{1pt}
+                \item \textbf{5 curated word lists}: LM-positive ($\sim$110), negative ($\sim$230), uncertainty ($\sim$90), hawkish ($\sim$40), dovish ($\sim$50).
+                \item \textbf{No training}: sign-count the words; majority wins.
+                \item Quick, interpretable floor.
+            \end{itemize}
+            {\scriptsize\itshape Sentiment F1 $\approx 0.53$; Stance F1 $\approx 0.39$.}
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \textbf{2. TF-IDF linear models}
+            \begin{itemize}\setlength{\itemsep}{1pt}
+                \item \textbf{Unigram+bigram} (\texttt{max\_features=50k}, \texttt{sublinear\_tf}) + LR.
+                \item \textbf{LinearSVC} ($C{=}1$, class-weighted).
+                \item \textbf{Trigrams} (\texttt{ngram=(1,3)}, 80k, \texttt{min\_df=2}) + LR.
+                \item \textbf{Hybrid}: TF-IDF + 8 scaled LM-lexicon features.
+            \end{itemize}
+            {\scriptsize\itshape Best: TF-IDF+SVM — F1 $0.85$ sent, $0.61$ stance.}
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \textbf{3. Zero-/Few-shot probes}
+            \begin{itemize}\setlength{\itemsep}{1pt}
+                \item \textbf{FinBERT zero-shot}: native 3-class head with a positive$\!\to\!$hawkish / negative$\!\to\!$dovish proxy for stance.
+                \item \textbf{Few-shot $k{=}16$}: freeze encoder, train \texttt{Linear(768,3)} on 48 examples (Adam lr $10^{-3}$, 200 ep).
+                \item Probed encoders: \textbf{FinBERT}, \textbf{BERT-base}, \textbf{RoBERTa-base}.
+            \end{itemize}
+            {\scriptsize\itshape FinBERT few-shot: F1 $0.967$ sent — matches full fine-tune.}
         \end{column}
     \end{columns}
 \end{frame}
@@ -193,61 +232,78 @@
         \midrule
         LM Lexicon (rule-based)             & 0.6932 & 0.5315 & 0.4153 & 0.3885 \\
         TF-IDF + LR                         & 0.8720 & 0.8232 & 0.6089 & 0.5873 \\
+        \rowcolor{UNSWGreen!25}
         TF-IDF + SVM (LinearSVC)            & 0.8940 & 0.8534 & 0.6331 & 0.6061 \\
         TF-IDF (trigrams) + LR              & 0.8786 & 0.8310 & 0.6109 & 0.5914 \\
         TF-IDF + LM Lexicon (hybrid)        & 0.8543 & 0.8050 & 0.6109 & 0.5863 \\
         \midrule
         FinBERT zero-shot (native)          & 0.9735 & 0.9650 & 0.4980 & 0.4874 \\
+        \rowcolor{UNSWRed!20}
         FinBERT few-shot (k=16 probe)       & 0.9779 & 0.9670 & 0.4859 & 0.4534 \\
         BERT-base few-shot (k=16)           & 0.7417 & 0.6500 & 0.3851 & 0.3744 \\
         RoBERTa-base few-shot (k=16)        & 0.7682 & 0.6722 & 0.3730 & 0.3600 \\
         \midrule
         FinBERT (fine-tuned)                & 0.9669 & 0.9459 & 0.6371 & 0.6194 \\
-        \rowcolor{UNSWYellow!30}
+        \rowcolor{UNSWYellow!40}
         BERT-base LLRD + Gradual UF         & 0.9757 & \textbf{0.9670} & \textbf{0.6512} & \textbf{0.6383} \\
-        \rowcolor{UNSWYellow!30}
+        \rowcolor{UNSWYellow!40}
         \textbf{Multi-task FinBERT}         & \textbf{0.9779} & \textbf{0.9666} & 0.6492 & \textbf{0.6384} \\
         \bottomrule
     \end{tabular}}
     \vspace{0.4em}
     \begin{minipage}{0.95\textwidth}
     \centering
-    {\small \textbf{Top-2 tied}: Multi-task FinBERT vs BERT-LLRD within $\pm 0.1$ pp. Multi-task \textbf{beats} single-task FinBERT by \textbf{+2.07 pp} sentiment F1 and \textbf{+1.90 pp} stance F1.}
+    {\footnotesize
+    \textcolor{UNSWGreen}{$\blacksquare$} \textbf{Best non-neural}: TF-IDF + SVM --- sub-ms inference; defensible floor for latency-sensitive / air-gapped deployment.\\
+    \textcolor{UNSWRed}{$\blacksquare$} \textbf{Best without fine-tuning}: FinBERT few-shot ($k{=}16$, 48 examples) --- matches full fine-tune sentiment (0.9670 vs 0.9459). Domain pretraining dominates in low-data.\\
+    \textcolor{UNSWYellow!70!black}{$\blacksquare$} \textbf{Best overall}: Multi-task FinBERT $\equiv$ BERT-LLRD (within $\pm 0.1$ pp). Multi-task \textbf{beats} single-task FinBERT by \textbf{+2.07 pp} sent / \textbf{+1.90 pp} stance F1.}
     \end{minipage}
 \end{frame}
 
 % ============================================================
 % 6. Analysis / Key Findings
 % ============================================================
-\begin{frame}{Key Findings \& Error Analysis}
+\begin{frame}{Error Analysis --- Multi-task FinBERT}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
-            \textbf{Findings}:
-            \begin{enumerate}\setlength{\itemsep}{2pt}
-                \item \textbf{Sentiment is near-solved} (F1 $\approx 0.97$); \textbf{stance is hard} (F1 $\approx 0.64$) --- 33 pp task-difficulty gap.
-                \item \textbf{Domain pretraining dominates in low-data}: at $k=16$, FinBERT beats BERT/RoBERTa by $\approx 30$ pp sentiment F1.
-                \item \textbf{Multi-task helps stance more} ($+1.90$ pp) than sentiment ($+2.07$ pp on a near-saturated task).
-                \item \textbf{Careful fine-tuning rivals domain pretraining}: BERT LLRD + gradual unfreeze ties multi-task FinBERT.
-            \end{enumerate}
-        \end{column}
-        \begin{column}{0.43\textwidth}
-            \textbf{Error patterns (Multi-task FinBERT)}:\\[0.3em]
-            {\footnotesize
+        \begin{column}{0.48\textwidth}
+            \centering
+            \textbf{Stance (FOMC test, N=496)}\\[0.3em]
+            {\small
             \begin{tabular}{lc}
                 \toprule
-                Per-class F1 & score \\
+                Class & Per-class F1 \\
                 \midrule
-                Sent.\ neutral   & 0.9928 \\
-                Sent.\ positive  & 0.9569 \\
-                Sent.\ negative  & 0.9500 \\
-                \midrule
-                Stance neutral   & 0.7109 \\
-                Stance dovish    & 0.6174 \\
-                Stance \textbf{hawkish}   & \textbf{0.5869} \\
+                dovish  & 0.6174 \\
+                hawkish & 0.5869 \\
+                \rowcolor{UNSWYellow!40}
+                \textbf{neutral} & \textbf{0.7109} \\
                 \bottomrule
             \end{tabular}}
-            \vspace{0.4em}
-            {\footnotesize \textbf{Hawkish} weakest: smallest train set (424) \& most hedged language (``some participants noted'').}
+            \vspace{0.6em}
+            \begin{itemize}\setlength{\itemsep}{2pt}
+                \item Most errors sit on the \textbf{neutral vs.\ leaning} boundary --- hedged language (``\textit{appropriate to maintain}'') is genuinely ambiguous.
+                \item Hawkish is the weakest class (lowest count in train and most lexically diverse).
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \centering
+            \textbf{Sentiment (FPB test, N=453)}\\[0.3em]
+            {\small
+            \begin{tabular}{lc}
+                \toprule
+                Class & Per-class F1 \\
+                \midrule
+                negative & 0.9500 \\
+                \rowcolor{UNSWYellow!40}
+                \textbf{neutral} & \textbf{0.9928} \\
+                positive & 0.9569 \\
+                \bottomrule
+            \end{tabular}}
+            \vspace{0.6em}
+            \begin{itemize}\setlength{\itemsep}{2pt}
+                \item Only $\sim$10 \textbf{errors total} across 453 test sentences --- sentiment is near-saturated.
+                \item Remaining errors are subtle \textit{comparative} constructions (``\textit{profit fell less than expected}'').
+            \end{itemize}
         \end{column}
     \end{columns}
 \end{frame}

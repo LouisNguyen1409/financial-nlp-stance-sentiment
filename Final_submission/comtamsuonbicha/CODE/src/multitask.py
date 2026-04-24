@@ -1,18 +1,3 @@
-"""
-Multi-task learning extension.
-
-Trains a unified model on BOTH datasets simultaneously:
-  - Shared FinBERT encoder layers
-  - Task-specific classification heads:
-      • Stance head  → 3 classes (hawkish / dovish / neutral)
-      • Sentiment head → 3 classes (positive / neutral / negative)
-
-Extensions beyond standard fine-tuning:
-  1. Joint multi-task training with alternating batches
-  2. Weighted cross-entropy loss to address class imbalance in FOMC
-  3. Analysis of whether joint training improves generalisation
-"""
-
 import os
 import sys
 import torch

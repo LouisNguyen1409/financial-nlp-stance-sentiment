@@ -1,9 +1,3 @@
-"""
-Central configuration for the Financial NLP Stance & Sentiment project.
-All hyperparameters, model names, dataset identifiers, and paths are defined here
-so that every script uses consistent settings.
-"""
-
 import os
 import torch
 

@@ -1,24 +1,3 @@
-"""
-Command-line interface for the Financial NLP Stance & Sentiment classifier.
-
-Accepts raw financial text input and returns:
-  - Stance prediction (hawkish / dovish / neutral) + confidence score
-  - Sentiment prediction (positive / neutral / negative) + confidence score
-
-Usage:
-    # Interactive mode
-    python cli.py
-
-    # Single sentence
-    python cli.py --text "The Fed signaled further rate hikes ahead"
-
-    # From a file (one sentence per line)
-    python cli.py --file input.txt
-
-    # Specify model (default: multitask)
-    python cli.py --model finetune --text "Markets rallied on dovish comments"
-"""
-
 import argparse
 import os
 import sys

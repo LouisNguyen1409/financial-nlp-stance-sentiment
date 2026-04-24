@@ -1,13 +1,3 @@
-"""
-Evaluation utilities for the Financial NLP project.
-
-Provides:
-  - compute_metrics(): per-class F1, macro-F1, accuracy
-  - print_classification_report(): formatted console output
-  - plot_confusion_matrix(): saves a confusion matrix heatmap
-  - error_analysis(): identifies and categorises misclassified examples
-"""
-
 import os
 import json
 import numpy as np

@@ -1,35 +1,3 @@
-"""
-Main experiment runner for the Financial NLP project.
-
-Six experiment stages (step 1 always runs; the remaining stages can be run
-together with --step 0 / no flag, or individually with --step N):
-
-  1  — Load and preprocess the FOMC + Financial PhraseBank datasets
-  2  — Non-neural baselines:
-        a. TF-IDF + Logistic Regression (original)
-        b. TF-IDF + Linear SVM          (alternative)
-        c. TF-IDF (1–3 grams) + LR      (alternative)
-        d. Loughran-McDonald lexicon — rule-based + TF-IDF + lexicon
-           features  (step 2b in the code; runs automatically with step 2)
-  3  — Pre-trained transformer evaluation (zero-shot FinBERT +
-        16-shot linear probe on frozen [CLS] for FinBERT, BERT-base,
-        RoBERTa-base)
-  4  — Single-task fine-tuning of FinBERT on each dataset
-  5  — Multi-task FinBERT with a shared encoder and dual task heads
-  6  — BERT-base with Layer-wise LR Decay + Gradual Unfreezing
-
-A combined summary of every test-set metric is written to
-results/all_results_summary.json at the end of the run.
-
-Usage:
-    python run_experiments.py              # step 0 = run every stage
-    python run_experiments.py --step 2     # non-neural baselines + lexicon
-    python run_experiments.py --step 3     # pretrained zero/few-shot
-    python run_experiments.py --step 4     # single-task FinBERT fine-tune
-    python run_experiments.py --step 5     # multi-task training
-    python run_experiments.py --step 6     # BERT-base LLRD fine-tuning
-"""
-
 import argparse
 import json
 import os

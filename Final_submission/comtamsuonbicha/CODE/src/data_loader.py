@@ -1,12 +1,3 @@
-"""
-Dataset loading and preprocessing for:
-  1. Financial PhraseBank  – sentiment classification (positive / neutral / negative)
-  2. FOMC Hawkish-Dovish   – stance classification (hawkish / dovish / neutral)
-
-Both datasets are downloaded from HuggingFace Hub and split into
-train / validation / test partitions with stratification.
-"""
-
 import os
 import numpy as np
 import pandas as pd

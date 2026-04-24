@@ -1,22 +1,3 @@
-"""
-Zero-shot and few-shot evaluation of pre-trained models.
-
-Models evaluated:
-  - FinBERT  (ProsusAI/finbert)      — domain-specific for financial text
-  - BERT-base-uncased                 — general-purpose
-  - RoBERTa-base                      — general-purpose
-
-Zero-shot approach:
-  - FinBERT has a native financial-sentiment head → used directly on both datasets.
-    For sentiment it outputs positive/negative/neutral (direct match).
-    For stance it provides a domain-informed prior (we map sentiment → stance proxy).
-
-Few-shot approach:
-  - Train a small classification head on top of frozen model embeddings
-    using k examples per class (default k=16).
-  - This fairly compares the quality of learned representations across models.
-"""
-
 import os
 import sys
 import torch

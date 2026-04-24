@@ -1,20 +1,3 @@
-"""
-Baseline models for Financial NLP tasks.
-
-Implements three non-neural baselines:
-  1. TF-IDF (bigrams) + Logistic Regression  (original baseline)
-  2. TF-IDF (bigrams) + Linear SVM           (best alternative for both tasks)
-  3. TF-IDF (1–3 grams, 80k vocab, min_df=2) + Logistic Regression
-
-Baselines #2 and #3 are produced by run_alternative_baselines(...) during
-step 2 of run_experiments.py. The lexicon-based baselines (rule-based and
-TF-IDF + LM lexicon features) live in src/lexicon.py.
-
-All models are trained and evaluated on both tasks:
-  - Stance classification  (hawkish / dovish / neutral)
-  - Sentiment classification (positive / neutral / negative)
-"""
-
 import os
 import sys
 from sklearn.feature_extraction.text import TfidfVectorizer

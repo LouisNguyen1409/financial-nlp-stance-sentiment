@@ -1,16 +1,3 @@
-"""
-Gradio web demo for the Financial NLP Stance & Sentiment classifier.
-
-Provides a simple web interface where users can:
-  - Paste any financial sentence
-  - Receive stance (hawkish / dovish / neutral) predictions with confidence
-  - Receive sentiment (positive / neutral / negative) predictions with confidence
-
-Usage:
-    python demo.py
-    # Opens at http://localhost:7860
-"""
-
 import os
 import sys
 import torch

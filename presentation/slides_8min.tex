@@ -99,49 +99,12 @@
 % 3. Baselines & Pre-trained Probes (3 first methods)
 % ============================================================
 \begin{frame}{Baselines \& Pre-trained Probes}
-    \begin{columns}[T]
-        \begin{column}{0.33\textwidth}
-            \textbf{1. LM Lexicon (rule-based)}\\
-            \cite{loughran2011liability}
-            \begin{itemize}\setlength{\itemsep}{1pt}
-                \item \textbf{5 curated word lists}: LM-positive ($\sim$110), negative ($\sim$230), uncertainty ($\sim$90), hawkish ($\sim$40), dovish ($\sim$50).
-                \item \textbf{No training}: sign-count the words; majority wins.
-                \item Quick, interpretable floor.
-            \end{itemize}
-            {\scriptsize\itshape Sentiment F1 $\approx 0.53$; Stance F1 $\approx 0.39$.}
-        \end{column}
-        \begin{column}{0.33\textwidth}
-            \textbf{2. TF-IDF linear models}
-            \begin{itemize}\setlength{\itemsep}{1pt}
-                \item \textbf{Unigram+bigram} (\texttt{max\_features=50k}, \texttt{sublinear\_tf}) + LR.
-                \item \textbf{LinearSVC} ($C{=}1$, class-weighted).
-                \item \textbf{Trigrams} (\texttt{ngram=(1,3)}, 80k, \texttt{min\_df=2}) + LR.
-                \item \textbf{Hybrid}: TF-IDF + 8 scaled LM-lexicon features.
-            \end{itemize}
-            {\scriptsize\itshape Best: TF-IDF+SVM — F1 $0.85$ sent, $0.61$ stance.}
-        \end{column}
-        \begin{column}{0.33\textwidth}
-            \textbf{3. Zero-/Few-shot probes}
-            \begin{itemize}\setlength{\itemsep}{1pt}
-                \item \textbf{FinBERT zero-shot}: native 3-class head with a positive$\!\to\!$hawkish / negative$\!\to\!$dovish proxy for stance.
-                \item \textbf{Few-shot $k{=}16$}: freeze encoder, train \texttt{Linear(768,3)} on 48 examples (Adam lr $10^{-3}$, 200 ep).
-                \item Probed encoders: \textbf{FinBERT}, \textbf{BERT-base}, \textbf{RoBERTa-base}.
-            \end{itemize}
-            {\scriptsize\itshape FinBERT few-shot: F1 $0.967$ sent — matches full fine-tune.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% ============================================================
-% 3. Pipeline + Fine-tuning
-% ============================================================
-\begin{frame}{Methodology: 6-Stage Model Ladder}
     \vspace{-0.3em}
     \begin{center}
     \begin{tikzpicture}[
         box/.style={draw=UNSWDarkBlue, rounded corners=2pt, minimum width=2.1cm, minimum height=0.8cm, align=center, font=\tiny\bfseries, line width=0.8pt},
         arr/.style={-{Stealth[length=2mm]}, line width=0.8pt, UNSWDarkBlue},
-        scale=0.95, transform shape
+        scale=0.80, transform shape
     ]
         \node[box, fill=UNSWLightGray]  (s1) at (0, 0) {1. LM Lexicon\\{\tiny rule-based}};
         \node[box, fill=UNSWLightGray]  (s2) at (2.5, 0) {2. TF-IDF\\{\tiny LR/SVM/trigrams}};
@@ -153,7 +116,41 @@
         \draw[arr] (s4) -- (s5); \draw[arr] (s5) -- (s6);
     \end{tikzpicture}
     \end{center}
-    \vspace{0.3em}
+    \vspace{0.2em}
+    \begin{columns}[T]
+        \begin{column}{0.33\textwidth}
+            \textbf{1. LM Lexicon (rule-based)}\\
+            \cite{loughran2011liability}
+            \begin{itemize}\setlength{\itemsep}{1pt}
+                \item \textbf{5 curated word lists}: LM-positive ($\sim$110), negative ($\sim$230), uncertainty ($\sim$90), hawkish ($\sim$40), dovish ($\sim$50).
+                \item \textbf{No training}: sign-count the words; majority wins.
+                \item Quick, interpretable floor.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \textbf{2. TF-IDF linear models}
+            \begin{itemize}\setlength{\itemsep}{1pt}
+                \item \textbf{Unigram+bigram} (\texttt{max\_features=50k}, \texttt{sublinear\_tf}) + LR.
+                \item \textbf{LinearSVC} ($C{=}1$, class-weighted).
+                \item \textbf{Trigrams} (\texttt{ngram=(1,3)}, 80k, \texttt{min\_df=2}) + LR.
+                \item \textbf{Hybrid}: TF-IDF + 8 scaled LM-lexicon features.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \textbf{3. Zero-/Few-shot probes}
+            \begin{itemize}\setlength{\itemsep}{1pt}
+                \item \textbf{FinBERT zero-shot}: native 3-class head with a positive$\!\to\!$hawkish / negative$\!\to\!$dovish proxy for stance.
+                \item \textbf{Few-shot $k{=}16$}: freeze encoder, train \texttt{Linear(768,3)} on 48 examples (Adam lr $10^{-3}$, 200 ep).
+                \item Probed encoders: \textbf{FinBERT}, \textbf{BERT-base}, \textbf{RoBERTa-base}.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ============================================================
+% 4. Fine-tuning recipes
+% ============================================================
+\begin{frame}{Fine-tuning Recipes}
     \begin{columns}[T]
         \begin{column}{0.5\textwidth}
             \textbf{FinBERT fine-tune}

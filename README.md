@@ -47,11 +47,8 @@ pip install -r requirements.txt
 ├── cli.py                    CLI inference
 ├── demo.py                   Gradio demo
 ├── data_analysis.py          10 analysis plots + dataset stats
-├── push_to_hf.py             HuggingFace Hub uploader
-├── report/                   report.tex (to be regenerated) + report.pdf
-├── presentation/             main.tex Beamer slides (to be regenerated) + .sty files
 ├── analysis/                 10 PNG plots
-├── models/                   (gitignored) finbert_* / bert_llrd_* / multitask_finbert
+├── models/                   (not included; populated after training) finbert_* / bert_llrd_* / multitask_finbert
 └── results/                  JSON metrics + confusion matrix PNGs
 ```
 
@@ -69,8 +66,8 @@ Or run individual steps:
 python run_experiments.py --step 2   # TF-IDF baselines (LR / SVM / trigrams)
 python run_experiments.py --step 3   # LM lexicon rule-based + hybrid
 python run_experiments.py --step 4   # FinBERT zero-shot, few-shot, and fine-tune
-python run_experiments.py --step 5   # BERT-base LLRD + gradual unfreezing
-python run_experiments.py --step 6   # Multi-task FinBERT (shared encoder, two heads)
+python run_experiments.py --step 5   # Multi-task FinBERT (shared encoder, two heads)
+python run_experiments.py --step 6   # BERT-base LLRD + gradual unfreezing
 ```
 
 All metrics and confusion matrices are written to `results/`.
@@ -179,13 +176,24 @@ directory.
 
 ## Trained Models on HuggingFace
 
-Uploaded via `push_to_hf.py` once training is committed:
+Pretrained weights are published on the HuggingFace Hub:
 
 - `Louisnguyen/multitask-finbert-financial`
 - `Louisnguyen/finbert-financial-stance`
 - `Louisnguyen/finbert-financial-sentiment`
 - `Louisnguyen/bert-llrd-financial-stance`
 - `Louisnguyen/bert-llrd-financial-sentiment`
+
+To use the CLI or Gradio demo without retraining, download the multi-task
+model into `models/multitask_finbert/`:
+
+```bash
+pip install huggingface_hub
+huggingface-cli download Louisnguyen/multitask-finbert-financial \
+    --local-dir models/multitask_finbert
+```
+
+Otherwise, train from scratch with `python run_experiments.py --step 5`.
 
 ## Hardware
 
@@ -195,4 +203,4 @@ All models were trained on an Apple M3 Max with the PyTorch MPS backend.
 ## Full Documentation
 
 For a full write-up of the methodology, ablations, and per-class analysis see
-`DOC.md` (English) and `DOC_VI.md` (Vietnamese).
+`REPORT/report.pdf`.

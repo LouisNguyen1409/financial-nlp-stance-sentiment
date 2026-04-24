@@ -333,7 +333,7 @@
         \begin{column}{0.42\textwidth}
             \textbf{Training details}~\cite{liu2019mt-dnn}:
             \begin{itemize}\setlength{\itemsep}{1pt}
-                \item \textbf{Alternating batches:} one FOMC batch, then one FPB batch; each updates only its own head plus the shared encoder.
+                \item \textbf{Alternating batches:} one FOMC batch, then one FPB batch. Each step back-propagates through the shared encoder and the active task's head (the inactive head receives zero gradient).
                 \item AdamW, lr $2\mathrm{e}{-5}$, 8 epochs, batch size 32.
                 \item Per-task cross-entropy loss (weighted for stance).
                 \item \textbf{Best checkpoint} selected by \textit{average} validation macro-F1 across both tasks.
@@ -372,7 +372,7 @@
     \begin{itemize}\setlength{\itemsep}{1pt}
         \item \textbf{TF-IDF + LinearSVM is the strongest non-neural baseline} on both tasks.
         \item \textbf{Lexicon alone is weak} (FPB F1 only 0.5315, stance F1 0.3885) --- sign-counting cannot handle negation or context.
-        \item \textbf{Trigrams give only marginal lift} over bigrams ($+0.5$ pp accuracy) --- vocabulary grows faster than signal.
+        \item \textbf{Trigrams give only marginal lift} over bigrams ($+0.66$ pp sentiment, $+0.20$ pp stance accuracy) --- vocabulary grows faster than signal.
         \item Adding LM-lexicon features to TF-IDF does \textit{not} help --- the TF-IDF vocabulary already covers those words.
     \end{itemize}
 \end{frame}
@@ -420,7 +420,7 @@
 
     \vspace{0.6em}
     \begin{itemize}\setlength{\itemsep}{0.3em}
-        \item \textbf{BERT-base with LLRD + gradual unfreeze matches FinBERT on sentiment} (macro-F1 tied at 0.9670) and \textbf{exceeds it on stance} by $+1.89$ pp F1.
+        \item \textbf{BERT-base with LLRD + gradual unfreeze beats single-task FinBERT on both tasks}: $+2.11$ pp sentiment F1 ($0.9459 \!\rightarrow\! 0.9670$) and $+1.89$ pp stance F1 ($0.6194 \!\rightarrow\! 0.6383$); sentiment-F1 ties FinBERT few-shot's $0.9670$.
         \item \textbf{Takeaway:} a disciplined fine-tuning recipe on a general-purpose backbone can close the domain-pretraining gap~\cite{sun2019finetune}.
         \item This is the first evidence in our study that \alert{``domain BERT'' is not the only path} to strong finance-domain results.
     \end{itemize}
@@ -550,7 +550,7 @@
     \begin{enumerate}\setlength{\itemsep}{0.35em}
         \item \textbf{Stance is a fundamentally harder task than sentiment.} Every model loses $\approx 30$ pp macro-F1 going from FPB to FOMC. The gap is not about data size --- the two datasets are similar --- but about \textit{label pragmatics}.
         \item \textbf{Sentiment is saturated by domain pretraining alone.} FinBERT zero-shot already reaches F1 0.9650; fine-tuning adds almost nothing on FPB. Extra capacity is spent on stance.
-        \item \textbf{A careful fine-tuning recipe rivals domain pretraining.} BERT-base with LLRD + gradual unfreeze + label smoothing \textit{matches} FinBERT on sentiment and \textit{beats} it on stance~\cite{sun2019finetune,howard2018ulmfit}.
+        \item \textbf{A careful fine-tuning recipe rivals domain pretraining.} BERT-base with LLRD + gradual unfreeze + label smoothing \textit{beats} single-task FinBERT on both sentiment ($+2.11$ pp) and stance ($+1.89$ pp)~\cite{sun2019finetune,howard2018ulmfit}.
         \item \textbf{Multi-task training is a free lunch.} One shared encoder + two heads improves single-task FinBERT by $+2.07$ pp sentiment F1 and $+1.90$ pp stance F1~\cite{liu2019mt-dnn}, and ties BERT LLRD on both.
         \item \textbf{Zero-shot sentiment $\neq$ stance.} The native FinBERT positive/negative head maps poorly to hawkish/dovish (F1 $0.4874$) --- a reminder that \alert{tone and policy direction are different signals}.
     \end{enumerate}
@@ -603,11 +603,11 @@
             Five public model repos under the \texttt{Louisnguyen/} namespace:
             \begin{itemize}\setlength{\itemsep}{1pt}
                 {\scriptsize
-                \item \texttt{Louisnguyen/finbert-fomc-stance}
-                \item \texttt{Louisnguyen/finbert-fpb-sentiment}
-                \item \texttt{Louisnguyen/bert-llrd-fomc-stance}
-                \item \texttt{Louisnguyen/bert-llrd-fpb-sentiment}
-                \item \texttt{Louisnguyen/finbert-multitask-fomc-fpb}
+                \item \texttt{Louisnguyen/finbert-financial-stance}
+                \item \texttt{Louisnguyen/finbert-financial-sentiment}
+                \item \texttt{Louisnguyen/bert-llrd-financial-stance}
+                \item \texttt{Louisnguyen/bert-llrd-financial-sentiment}
+                \item \texttt{Louisnguyen/multitask-finbert-financial}
                 }
             \end{itemize}
 

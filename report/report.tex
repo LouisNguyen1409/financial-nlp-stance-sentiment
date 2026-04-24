@@ -21,10 +21,19 @@
 \title{Financial Stance and Sentiment Classification:\\
 A Multi-Task and Layer-Wise Fine-Tuning Study on FOMC and Financial PhraseBank}
 
-\author{\IEEEauthorblockN{Louis Nguyen, Quoc Dat Bui, Nam Khanh Tran, Quang Minh Phan}
-\IEEEauthorblockA{School of Computer Science and Engineering,
-University of New South Wales, Sydney, Australia\\
-\{z5428797, z5404752, z5577208, z5531827\}@unsw.edu.au}}
+\author{%
+\IEEEauthorblockN{%
+Louis Nguyen\textsuperscript{1}\quad
+Quoc Dat Bui\textsuperscript{2}\quad
+Nam Khanh Tran\textsuperscript{3}\quad
+Quang Minh Phan\textsuperscript{4}}
+\IEEEauthorblockA{%
+School of Computer Science and Engineering, University of New South Wales, Sydney, Australia\\
+\textsuperscript{1}z5428797@unsw.edu.au\quad
+\textsuperscript{2}z5404752@unsw.edu.au\quad
+\textsuperscript{3}z5577208@unsw.edu.au\quad
+\textsuperscript{4}z5531827@unsw.edu.au}
+}
 
 \begin{document}
 
@@ -40,7 +49,7 @@ University of New South Wales, Sydney, Australia\\
 \maketitle
 \vspace{0.5em}
 \begin{center}
-\captionof{table}{Project scope and credit claim for UNSW COMP6713 2026 T1 (155+ credits, 80 minimum).}
+\captionof{table}{Project scope and credit claim for UNSW COMP6713 2026 T1 (155 credits, 80 minimum).}
 \label{tab:scope}
 \small
 \begin{tabularx}{\textwidth}{l l X r}
@@ -50,21 +59,19 @@ University of New South Wales, Sydney, Australia\\
 A (Problem)   & 2 NLP problems $\times$ 5          & Stance (hawkish / dovish / neutral) and sentiment (pos / neg / neu) classification & 10 \\
               & 2 text domains $\times$ 5          & Central-bank communications (FOMC) and corporate financial news (PhraseBank)       & 10 \\
 \midrule
-B (Data)      & 2 datasets $\times$ 5              & FOMC Hawkish--Dovish \cite{shah2023trillion} and Financial PhraseBank \cite{malo2014good} & 10 \\
-              & Domain lexicon                     & Loughran--McDonald financial sentiment dictionary \cite{loughran2011liability}      & 10 \\
+B (Data)      & Two existing datasets              & FOMC Hawkish--Dovish \cite{shah2023trillion} and Financial PhraseBank \cite{malo2014good} & 10 \\
+              & Existing domain lexicon            & Loughran--McDonald financial sentiment dictionary \cite{loughran2011liability}      & 10 \\
 \midrule
-C (Models)    & Required baseline                  & TF-IDF + Logistic Regression                                                         & 10 \\
-              & 3 alternative baselines            & TF-IDF+SVM, TF-IDF trigrams+LR, TF-IDF+LM lexicon features                           & 15 \\
-              & 3 pre-trained $\times$ ZS/FS       & FinBERT \cite{araci2019finbert} (zero + few-shot), BERT \cite{devlin2019bert} (few), RoBERTa (few) & 15 \\
-              & FinBERT fine-tuning                & Full fine-tune with class-weighted CE and linear schedule                            & 20 \\
-              & Extension 1 (novel)                & Multi-task FinBERT (shared encoder, two heads) \cite{liu2019mt-dnn}                  & 20 \\
-              & Extension 2                        & BERT-base with LLRD + gradual unfreezing + label smoothing                           & 15 \\
+C (Models)    & Required baseline (essential)      & TF-IDF + LR (plus TF-IDF+SVM, TF-IDF trigrams+LR, TF-IDF+LM hybrid as comparison)    & 0 \\
+              & 3 pre-trained $\times$ ZS/FS (5 cr each) & FinBERT \cite{araci2019finbert} (zero + few-shot), BERT \cite{devlin2019bert} (few), RoBERTa (few) & 15 \\
+              & Fine-tune a model \#1 (20 cr)      & FinBERT full fine-tune with class-weighted CE and linear schedule                    & 20 \\
+              & Fine-tune a model \#2 (20 cr)      & BERT-base fine-tune with LLRD + gradual unfreezing + label smoothing \cite{howard2018ulmfit,sun2019finetune} & 20 \\
+              & Extend a method (30 cr)            & Multi-task FinBERT: shared encoder, two heads, alternating batches, weighted CE \cite{liu2019mt-dnn} & 30 \\
 \midrule
 D (Evaluation)& Quantitative                       & Accuracy, macro-F1, per-class F1 on held-out test sets                               & 10 \\
               & Qualitative                        & Error analysis on real FOMC / PhraseBank sentences                                   & 5  \\
-              & CLI                                & \texttt{predict.py} command-line inference                                           & 5  \\
-              & Gradio demo                        & Two-tab interactive web UI (stance and sentiment)                                    & 10 \\
-              & HF Hub release                     & Public checkpoint and demo card on Hugging Face Hub                                  & 5  \\
+              & Command-line testing               & \texttt{cli.py} with \texttt{-{-}text} / \texttt{-{-}file} / interactive modes       & 5  \\
+              & Demo                               & Two-tab Gradio web UI (stance and sentiment)                                         & 10 \\
 \midrule
 \multicolumn{3}{r}{\textbf{Total claimed}} & \textbf{155} \\
 \bottomrule
@@ -171,8 +178,9 @@ neutral-heavy: 130 dovish / 121 hawkish / 245 neutral
 
 \subsection{Financial PhraseBank all-agree (sentiment)}
 \label{sec:data-fpb}
-We use \texttt{gtfintechlab/financial\_phrasebank\_sentences\_allagree},
-configuration \texttt{"5768"} \cite{malo2014good}: 2{,}264 financial news
+We use the HuggingFace dataset \texttt{gtfintechlab/}\allowbreak
+\texttt{financial\_phrasebank\_\allowbreak sentences\_allagree}, configuration
+\texttt{"5768"} \cite{malo2014good}: 2{,}264 financial news
 sentences on which \emph{all five} annotators agreed. The test split (453
 sentences) is neutral-dominant: 61 negative / 278 neutral / 114 positive
 (13.47 / 61.37 / 25.17~\%).
@@ -264,7 +272,7 @@ acts as implicit warmup.
 \label{sec:method-mt}
 We implement \texttt{MultiTaskFinBERT(nn.Module)} with a
 shared FinBERT encoder
-(\texttt{self.encoder = AutoModel.from\_pretrained("ProsusAI/finbert")}),
+(\texttt{self.encoder = AutoModel.\allowbreak from\_pretrained(}\allowbreak\texttt{"ProsusAI/finbert")}),
 shared \texttt{nn.Dropout(0.1)} and two task-specific linear heads
 \texttt{stance\_head = nn.Linear(768, 3)} and
 \texttt{sentiment\_head = nn.Linear(768, 3)}. The \texttt{forward(\dots,
@@ -406,7 +414,7 @@ Multi-task FinBERT.}
 \section{Analysis of Results}
 \label{sec:analysis}
 
-\paragraph{(1) Sentiment is near-solved; stance is not.}
+\paragraph{Sentiment is near-solved; stance is not.}
 Every transformer we train or probe clears 97\% sentiment accuracy,
 including a zero-shot FinBERT that has \emph{never} seen our training
 sentences (0.9735 / 0.9650). The TF-IDF+SVM baseline is already at 0.8940
@@ -415,7 +423,7 @@ tops out at 0.6512 accuracy and 0.6384 macro-F1. The 33-percentage-point
 gap between the two tasks (Figure~\ref{fig:progression}) reflects a
 genuine difference in difficulty, not a capacity shortfall.
 
-\paragraph{(2) Domain pre-training pays off most in low-data regimes.}
+\paragraph{Domain pre-training pays off most in low-data regimes.}
 With only 48 labelled examples, FinBERT reaches 0.9670 sentiment macro-F1
 while BERT-base (0.6500) and RoBERTa-base (0.6722) trail by
 \emph{$\approx$30 points}. Once we allow full fine-tuning on the 1{,}584
@@ -423,15 +431,14 @@ FPB training sentences, the gap almost disappears: fine-tuned FinBERT is
 0.9459 and BERT-base LLRD is 0.9670. Domain pre-training is a large-data
 substitute, not a large-data amplifier.
 
-\paragraph{(3) Multi-task learning helps stance more than sentiment.}
+\paragraph{Multi-task learning helps stance more than sentiment.}
 Multi-task FinBERT beats single-task fine-tuned FinBERT by
 \textbf{+1.90~pp} stance macro-F1 (0.6194 $\rightarrow$ 0.6384) and
 \textbf{+2.07~pp} sentiment macro-F1 (0.9459 $\rightarrow$ 0.9666). Stance
 is the less saturated task, so the inductive bias from the auxiliary FPB
 objective has more room to move the decision boundary.
 
-\paragraph{(4) Careful general-purpose fine-tuning matches domain
-pre-training.} Our BERT-base LLRD extension is effectively \emph{tied}
+\paragraph{Careful general-purpose fine-tuning matches domain pre-training.} Our BERT-base LLRD extension is effectively \emph{tied}
 with Multi-task FinBERT: sentiment 0.9670 vs 0.9666 macro-F1 (BERT slightly
 ahead), stance 0.6383 vs 0.6384 (multi-task slightly ahead by
 $10^{-4}$). Weighted-F1 confirms the tie (multi-task: 0.6561 stance /
@@ -441,7 +448,7 @@ smoothing and class-weighted CE, a generic 2018 encoder reaches the same
 operating point as a domain-pretrained encoder with an auxiliary head.
 \emph{We do not claim LLRD outperforms FinBERT}--it matches it.
 
-\paragraph{(5) The best non-neural system is still useful.}
+\paragraph{The best non-neural system is still useful.}
 TF-IDF + LinearSVC is 0.8534 sentiment / 0.6061 stance macro-F1, with
 sub-millisecond inference. For latency-sensitive or air-gapped production
 settings it is a defensible floor.
@@ -490,7 +497,7 @@ comparative framing.
 % -------------------------------------------------------------------
 \section{Deployment}
 \label{sec:deploy}
-We ship two interfaces. \texttt{predict.py} is a CLI that loads either the
+We ship two interfaces. \texttt{cli.py} is a CLI that loads either the
 fine-tuned single-task checkpoints or the Multi-task FinBERT and returns
 JSON predictions on stdin. \texttt{demo.py} wraps the same model in a
 Gradio web UI with two tabs (stance and sentiment), each showing the
@@ -559,7 +566,7 @@ Y. Yang, M. C. S. Uy, and A. Huang,
 \bibitem[Shah et al.(2023)]{shah2023trillion}
 A. Shah, S. Paturi, and S. Chava,
 ``Trillion dollar words: A new financial dataset, task \& market
-analysis,'' in \emph{Proc. ACL}, 2023.
+analysis,'' in \emph{Proc. ACL}, 2023, pp. 6664--6679.
 
 \bibitem[Malo et al.(2014)]{malo2014good}
 P. Malo, A. Sinha, P. Korhonen, J. Wallenius, and P. Takala,
@@ -570,7 +577,17 @@ texts,'' \emph{J. Assoc. Inf. Sci. Technol.}, vol.~65, no.~4, pp.
 \bibitem[Liu et al.(2019)]{liu2019mt-dnn}
 X. Liu, P. He, W. Chen, and J. Gao,
 ``Multi-task deep neural networks for natural language understanding,''
-in \emph{Proc. ACL}, 2019.
+in \emph{Proc. ACL}, 2019, pp. 4487--4496.
+
+\bibitem[Howard and Ruder(2018)]{howard2018ulmfit}
+J. Howard and S. Ruder,
+``Universal language model fine-tuning for text classification,''
+in \emph{Proc. ACL}, 2018, pp. 328--339.
+
+\bibitem[Sun et al.(2019)]{sun2019finetune}
+C. Sun, X. Qiu, Y. Xu, and X. Huang,
+``How to fine-tune BERT for text classification?''
+in \emph{Chinese Computational Linguistics (CCL)}, 2019, pp. 194--206.
 
 \end{thebibliography}
 

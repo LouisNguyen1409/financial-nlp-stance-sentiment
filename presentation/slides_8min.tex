@@ -63,8 +63,17 @@
 % ============================================================
 % 2. Problem + Datasets
 % ============================================================
-\begin{frame}{Datasets \& Problem Statement}
+\begin{frame}{Problem Statement \& Datasets}
     \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \textbf{Problem statement:}\\[0.3em]
+            Given a short financial sentence, predict \emph{both} its monetary-policy stance and its market sentiment under heavy class imbalance and limited labelled data ($<\!2{,}500$ per task).\\[0.6em]
+            \textbf{Two 3-class classification tasks:}
+            \begin{itemize}\setlength{\itemsep}{2pt}
+                \item \textbf{Stance} (FOMC monetary policy)\\ \{hawkish, dovish, neutral\}
+                \item \textbf{Sentiment} (financial news)\\ \{positive, negative, neutral\}
+            \end{itemize}
+        \end{column}
         \begin{column}{0.5\textwidth}
             \textbf{Datasets (70/10/20 stratified, seed 42):}\\[0.4em]
             {\footnotesize
@@ -81,21 +90,6 @@
                 \item FPB test: 61/278/114 (\textbf{neu-dominant})
                 \item FOMC test: 130/121/245 (balanced-ish)
                 \item LM lexicon~\cite{loughran2011liability} for rule-based baseline
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \textbf{Problem statement:}\\[0.3em]
-            Given a short financial sentence, predict \emph{both} its monetary-policy stance and its market sentiment under heavy class imbalance and limited labelled data ($<\!2{,}500$ per task).\\[0.6em]
-            \textbf{Two 3-class classification tasks:}
-            \begin{itemize}\setlength{\itemsep}{2pt}
-                \item \textbf{Stance} (FOMC monetary policy)\\ \{hawkish, dovish, neutral\}
-                \item \textbf{Sentiment} (financial news)\\ \{positive, negative, neutral\}
-            \end{itemize}
-            \vspace{0.3em}
-            \textbf{Why it matters:}
-            \begin{itemize}\setlength{\itemsep}{2pt}
-                \item Central-bank stance moves markets
-                \item Shared financial vocabulary, different tasks $\Rightarrow$ natural MTL setup
             \end{itemize}
         \end{column}
     \end{columns}

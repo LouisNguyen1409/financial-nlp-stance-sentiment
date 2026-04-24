@@ -165,7 +165,7 @@ def main():
 
     elif args.file:
         # Read sentences from file
-        with open(args.file) as f:
+        with open(args.file, encoding="utf-8") as f:
             sentences = [line.strip() for line in f if line.strip()]
         for i, sent in enumerate(sentences):
             print(f"\n{'─'*60}")

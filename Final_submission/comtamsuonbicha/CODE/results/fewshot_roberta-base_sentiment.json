@@ -1,0 +1,12 @@
+{
+  "model": "roberta-base (few-shot k=16)",
+  "task": "sentiment",
+  "accuracy": 0.7682,
+  "macro_f1": 0.6722,
+  "per_class_f1": {
+    "negative": 0.5469,
+    "neutral": 0.8815,
+    "positive": 0.5882
+  },
+  "report": "              precision    recall  f1-score   support\n\n    negative     0.5224    0.5738    0.5469        61\n     neutral     0.8547    0.9101    0.8815       278\n    positive     0.6667    0.5263    0.5882       114\n\n    accuracy                         0.7682       453\n   macro avg     0.6813    0.6701    0.6722       453\nweighted avg     0.7627    0.7682    0.7627       453\n"
+}

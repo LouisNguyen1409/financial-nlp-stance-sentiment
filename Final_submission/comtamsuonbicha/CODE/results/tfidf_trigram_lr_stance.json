@@ -1,0 +1,12 @@
+{
+  "model": "TF-IDF (trigrams) + LR",
+  "task": "stance",
+  "accuracy": 0.6109,
+  "macro_f1": 0.5914,
+  "per_class_f1": {
+    "dovish": 0.5517,
+    "hawkish": 0.5358,
+    "neutral": 0.6867
+  },
+  "report": "              precision    recall  f1-score   support\n\n      dovish     0.5496    0.5538    0.5517       130\n     hawkish     0.4931    0.5868    0.5358       121\n     neutral     0.7240    0.6531    0.6867       245\n\n    accuracy                         0.6109       496\n   macro avg     0.5889    0.5979    0.5914       496\nweighted avg     0.6219    0.6109    0.6145       496\n"
+}

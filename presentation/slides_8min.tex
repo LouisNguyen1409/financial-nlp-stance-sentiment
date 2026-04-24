@@ -139,9 +139,9 @@
         \begin{column}{0.33\textwidth}
             \textbf{3. Zero-/Few-shot probes}
             \begin{itemize}\setlength{\itemsep}{1pt}
-                \item \textbf{FinBERT zero-shot}: native 3-class head with a positive$\!\to\!$hawkish / negative$\!\to\!$dovish proxy for stance.
-                \item \textbf{Few-shot $k{=}16$}: freeze encoder, train \texttt{Linear(768,3)} on 48 examples (Adam lr $10^{-3}$, 200 ep).
-                \item Probed encoders: \textbf{FinBERT}, \textbf{BERT-base}, \textbf{RoBERTa-base}.
+                \item \textbf{FinBERT zero-shot}: native head with positive$\!\to\!$hawkish, negative$\!\to\!$dovish proxy for stance.
+                \item \textbf{Few-shot $k{=}16$}: frozen encoder + \texttt{Linear(768,3)} probe on 48 examples.
+                \item Probed: FinBERT, BERT, RoBERTa.
             \end{itemize}
         \end{column}
     \end{columns}
@@ -245,8 +245,8 @@
     \begin{minipage}{0.95\textwidth}
     \centering
     {\footnotesize
-    \textcolor{UNSWGreen}{$\blacksquare$} \textbf{Best non-neural}: TF-IDF + SVM --- sub-ms inference; defensible floor for latency-sensitive / air-gapped deployment.\\
-    \textcolor{UNSWRed}{$\blacksquare$} \textbf{Best without fine-tuning}: FinBERT few-shot ($k{=}16$, 48 examples) --- matches full fine-tune sentiment (0.9670 vs 0.9459). Domain pretraining dominates in low-data.\\
+    \textcolor{UNSWGreen}{$\blacksquare$} \textbf{Best baseline}: TF-IDF + SVM --- sub-ms inference; defensible floor for latency-sensitive / air-gapped deployment.\\
+    \textcolor{UNSWRed}{$\blacksquare$} \textbf{Best pretrained}: FinBERT few-shot ($k{=}16$, 48 examples) --- matches full fine-tune sentiment (0.9670 vs 0.9459). Domain pretraining dominates in low-data.\\
     \textcolor{UNSWYellow!70!black}{$\blacksquare$} \textbf{Best overall}: Multi-task FinBERT $\equiv$ BERT-LLRD (within $\pm 0.1$ pp). Multi-task \textbf{beats} single-task FinBERT by \textbf{+2.07 pp} sent / \textbf{+1.90 pp} stance F1.}
     \end{minipage}
 \end{frame}
@@ -356,13 +356,19 @@
 \end{frame}
 
 % ============================================================
-% Thank you slide
+% Thank you slide (black on white)
 % ============================================================
-\begin{frame}[standout]
+{
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=UNSWDarkBlue, bg=white}
+\begin{frame}[plain]
+    \vfill
     \centering
-    \Huge Thank you for listening!\\[0.6em]
-    \Large Q\&A time
+    {\color{UNSWDarkBlue}\Huge\textbf{Thank you for listening!}}\\[1em]
+    {\color{UNSWDarkBlue}\Large Q\&A time}
+    \vfill
 \end{frame}
+}
 
 % ============================================================
 % References (backup, not counted in 8)

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.4.23)  23 APR 2026 17:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.4.23)  24 APR 2026 13:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1335,28 +1335,58 @@ c}]
 ] [6
 
 ]
-Underfull \hbox (badness 1496) in paragraph at lines 160--160
-\OT1/cmss/m/n/8 no-ta-tor agree-ment. Highly
+Underfull \hbox (badness 5939) in paragraph at lines 165--165
+[]|\OT1/cmss/m/n/10 Sentences from FOMC
  []
 
 
-Overfull \hbox (153.22845pt too wide) in paragraph at lines 160--160
- [][] 
+Underfull \hbox (badness 1675) in paragraph at lines 165--165
+\OT1/cmss/m/n/10 utes, and press con-fer-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 165--165
+[]|\OT1/cmss/m/n/10 News head-lines with
+ []
+
+
+Underfull \hbox (badness 5105) in paragraph at lines 165--165
+\OT1/cmss/m/n/10 100% an-no-ta-tor agree-
+ []
+
+
+Underfull \hbox (badness 1783) in paragraph at lines 165--165
+\OT1/cmss/m/n/10 ment. Highly neutral-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 165--165
+[]|\OT1/cmss/m/n/10 Domain fi-nan-cial word
+ []
+
+
+Underfull \hbox (badness 6268) in paragraph at lines 165--165
+\OT1/cmss/m/n/10 ish ($\OMS/cmsy/m/n/10 ^^Y$\OT1/cmss/m/n/10 40) and dovish
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 165--165
+\OT1/cmss/m/n/10 ($\OMS/cmsy/m/n/10 ^^Y$\OT1/cmss/m/n/10 50) monetary-policy
  []
 
 [7
 
 ]
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 195.
-<../analysis/class_distribution.png, id=111, 996.6033pt x 347.6187pt>
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 200.
+<../analysis/class_distribution.png, id=112, 996.6033pt x 347.6187pt>
 File: ../analysis/class_distribution.png Graphic file (type png)
 <use ../analysis/class_distribution.png>
 Package pdftex.def Info: ../analysis/class_distribution.png  used on input line
- 195.
+ 200.
 (pdftex.def)             Requested size: 167.30147pt x 58.35179pt.
 
-Overfull \vbox (57.8314pt too high) detected at line 195
+Overfull \vbox (57.8314pt too high) detected at line 200
  []
 
 [8
@@ -1369,20 +1399,20 @@ Overfull \vbox (57.8314pt too high) detected at line 195
 
 ]
 LaTeX Font Info:    Trying to load font information for OMS+cmss on input line 
-269.
-LaTeX Font Info:    No file OMScmss.fd. on input line 269.
+274.
+LaTeX Font Info:    No file OMScmss.fd. on input line 274.
 
 
 LaTeX Font Warning: Font shape `OMS/cmss/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbraceleft' on input line 269.
+(Font)              for symbol `textbraceleft' on input line 274.
 
 [12
 
 ] [13
 
 ]
-Overfull \vbox (38.41214pt too high) detected at line 342
+Overfull \vbox (38.41214pt too high) detected at line 347
  []
 
 [14
@@ -1398,7 +1428,7 @@ Overfull \vbox (38.41214pt too high) detected at line 342
 ] [19
 
 ]
-Overfull \vbox (5.88853pt too high) detected at line 479
+Overfull \vbox (5.88853pt too high) detected at line 484
  []
 
 [20
@@ -1408,58 +1438,33 @@ Overfull \vbox (5.88853pt too high) detected at line 479
 ] [22
 
 ]
-Overfull \vbox (23.25131pt too high) detected at line 552
+Overfull \vbox (23.25131pt too high) detected at line 557
  []
 
 [23
 
 ]
-<../analysis/domain_pretraining_gap.png, id=232, 996.6033pt x 368.93835pt>
+<../analysis/domain_pretraining_gap.png, id=233, 996.6033pt x 368.93835pt>
 File: ../analysis/domain_pretraining_gap.png Graphic file (type png)
 <use ../analysis/domain_pretraining_gap.png>
 Package pdftex.def Info: ../analysis/domain_pretraining_gap.png  used on input 
-line 561.
+line 566.
 (pdftex.def)             Requested size: 286.80426pt x 106.1731pt.
  [24
 
  <../analysis/domain_pretraining_gap.png>]
-<../analysis/performance_progression.png, id=239, 997.68735pt x 418.80466pt>
+<../analysis/performance_progression.png, id=240, 997.68735pt x 418.80466pt>
 File: ../analysis/performance_progression.png Graphic file (type png)
 <use ../analysis/performance_progression.png>
 Package pdftex.def Info: ../analysis/performance_progression.png  used on input
- line 570.
+ line 575.
 (pdftex.def)             Requested size: 310.70361pt x 130.42879pt.
  [25
 
  <../analysis/performance_progression.png>] [26
 
 ]
-Overfull \hbox (15.44714pt too wide) in paragraph at lines 611--611
-\OT1/cmtt/m/n/10 Louisnguyen/finbert-fomc-stance  
- []
-
-
-Overfull \hbox (25.94705pt too wide) in paragraph at lines 611--611
-\OT1/cmtt/m/n/10 Louisnguyen/finbert-fpb-sentiment  
- []
-
-
-Overfull \hbox (25.94705pt too wide) in paragraph at lines 611--611
-\OT1/cmtt/m/n/10 Louisnguyen/bert-llrd-fomc-stance  
- []
-
-
-Overfull \hbox (36.44696pt too wide) in paragraph at lines 611--611
-\OT1/cmtt/m/n/10 Louisnguyen/bert-llrd-fpb-sentiment  
- []
-
-
-Overfull \hbox (52.19682pt too wide) in paragraph at lines 611--611
-\OT1/cmtt/m/n/10 Louisnguyen/finbert-multitask-fomc-fpb  
- []
-
-
-Overfull \vbox (23.55666pt too high) detected at line 611
+Overfull \vbox (26.7511pt too high) detected at line 618
  []
 
 [27
@@ -1471,7 +1476,7 @@ Overfull \vbox (23.55666pt too high) detected at line 611
 ]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\translate ' on input line 628.
+(hyperref)                removing `\translate ' on input line 635.
 
 [30
 
@@ -1512,11 +1517,11 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 34407 strings out of 467871
- 692824 string characters out of 5429920
+ 34411 strings out of 467871
+ 692865 string characters out of 5429920
  1291453 words of memory out of 5000000
- 62575 multiletter control sequences out of 15000+600000
- 645995 words of font info for 104 fonts, out of 8000000 for 9000
+ 62577 multiletter control sequences out of 15000+600000
+ 646508 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,13n,123p,1913b,1865s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <D:/Study/Code/miktex/fonts/type1/public/amsfonts/cm/cmmi10.pfb><D:/Study/Cod
@@ -1532,13 +1537,15 @@ udy/Code/miktex/fonts/type1/public/amsfonts/cm/cmssi9.pfb><D:/Study/Code/miktex
 /fonts/type1/public/amsfonts/cm/cmsy10.pfb><D:/Study/Code/miktex/fonts/type1/pu
 blic/amsfonts/cm/cmsy8.pfb><D:/Study/Code/miktex/fonts/type1/public/amsfonts/cm
 /cmsy9.pfb><D:/Study/Code/miktex/fonts/type1/public/amsfonts/cm/cmtt10.pfb><D:/
-Study/Code/miktex/fonts/type1/public/amsfonts/cm/cmtt9.pfb><C:/Users/mapkh/AppD
-ata/Roaming/MiKTeX/fonts/type1/public/cm-super/sfss0800.pfb><C:/Users/mapkh/App
-Data/Roaming/MiKTeX/fonts/type1/public/cm-super/sfss0900.pfb><C:/Users/mapkh/Ap
-pData/Roaming/MiKTeX/fonts/type1/public/cm-super/sfss1000.pfb>
-Output written on main.pdf (31 pages, 643444 bytes).
+Study/Code/miktex/fonts/type1/public/amsfonts/cm/cmtt8.pfb><D:/Study/Code/mikte
+x/fonts/type1/public/amsfonts/cm/cmtt9.pfb><C:/Users/mapkh/AppData/Roaming/MiKT
+eX/fonts/type1/public/cm-super/sfss0700.pfb><C:/Users/mapkh/AppData/Roaming/MiK
+TeX/fonts/type1/public/cm-super/sfss0800.pfb><C:/Users/mapkh/AppData/Roaming/Mi
+KTeX/fonts/type1/public/cm-super/sfss0900.pfb><C:/Users/mapkh/AppData/Roaming/M
+iKTeX/fonts/type1/public/cm-super/sfss1000.pfb>
+Output written on main.pdf (31 pages, 655313 bytes).
 PDF statistics:
- 385 PDF objects out of 1000 (max. 8388607)
+ 396 PDF objects out of 1000 (max. 8388607)
  80 named destinations out of 1000 (max. 500000)
  122 words of extra memory for PDF output out of 10000 (max. 10000000)
 

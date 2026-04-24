@@ -27,14 +27,20 @@ University of New South Wales, Sydney, Australia\\
 \{z5428797, z5404752, z5577208, z5531827\}@unsw.edu.au}}
 
 \begin{document}
-\maketitle
 
 % -------------------------------------------------------------------
-% Scope table (before abstract, full-width)
+% Scope table: placed at the top of page 1, together with \maketitle,
+% so the reviewer sees the credit breakdown first. Uses the
+% \twocolumn[] top-matter argument to render a page-wide, non-floating
+% block before the two-column body begins.
 % -------------------------------------------------------------------
-\begin{table*}[t]
-\centering
-\caption{Project scope and credit claim for UNSW COMP6713 2026 T1 (155+ credits, 80 minimum).}
+\makeatletter
+\twocolumn[
+\begin{@twocolumnfalse}
+\maketitle
+\vspace{0.5em}
+\begin{center}
+\captionof{table}{Project scope and credit claim for UNSW COMP6713 2026 T1 (155+ credits, 80 minimum).}
 \label{tab:scope}
 \small
 \begin{tabularx}{\textwidth}{l l X r}
@@ -63,7 +69,11 @@ D (Evaluation)& Quantitative                       & Accuracy, macro-F1, per-cla
 \multicolumn{3}{r}{\textbf{Total claimed}} & \textbf{155} \\
 \bottomrule
 \end{tabularx}
-\end{table*}
+\end{center}
+\vspace{1em}
+\end{@twocolumnfalse}
+]
+\makeatother
 
 % -------------------------------------------------------------------
 \begin{abstract}
@@ -106,9 +116,9 @@ This paper reports a controlled comparison of twelve systems on both tasks
 using the public \texttt{gtfintechlab} Hugging Face splits.  Our
 contributions are:
 \begin{itemize}[leftmargin=1.1em,itemsep=0.15em,topsep=0.2em]
-    \item A \emph{wide baseline ladder}---TF-IDF with logistic regression,
+    \item A \emph{wide baseline ladder} TF-IDF with logistic regression,
           LinearSVC, trigrams, and hand-crafted Loughran--McDonald lexicon
-          features---establishing a strong non-neural floor.
+          features establishing a strong non-neural floor.
     \item A zero-/few-shot study over three encoders (FinBERT, BERT-base,
           RoBERTa-base) that isolates the contribution of domain
           pre-training with almost no labelled data.
@@ -348,8 +358,6 @@ Multi-task FinBERT              & 0.6492 & \textbf{0.6384} \\
 \end{table}
 
 % -------------------------------------------------------------------
-\section{Data Analysis}
-\label{sec:dataanalysis}
 
 Both test sets are moderately imbalanced. For FPB, 61.37\% of test
 sentences are neutral, 25.17\% positive and 13.47\% negative; for FOMC,
@@ -528,38 +536,38 @@ remains most valuable in low-data regimes.
 % -------------------------------------------------------------------
 \begin{thebibliography}{9}
 
-\bibitem{loughran2011liability}
+\bibitem[Loughran and McDonald(2011)]{loughran2011liability}
 T. Loughran and B. McDonald,
 ``When is a liability not a liability? Textual analysis, dictionaries, and
 10-Ks,'' \emph{The Journal of Finance}, vol.~66, no.~1, pp. 35--65, 2011.
 
-\bibitem{devlin2019bert}
+\bibitem[Devlin et al.(2019)]{devlin2019bert}
 J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova,
 ``BERT: Pre-training of deep bidirectional transformers for language
 understanding,'' in \emph{Proc. NAACL-HLT}, 2019, pp. 4171--4186.
 
-\bibitem{araci2019finbert}
+\bibitem[Araci(2019)]{araci2019finbert}
 D. Araci,
 ``FinBERT: Financial sentiment analysis with pre-trained language
 models,'' \emph{arXiv:1908.10063}, 2019.
 
-\bibitem{yang2020finbert}
+\bibitem[Yang et al.(2020)]{yang2020finbert}
 Y. Yang, M. C. S. Uy, and A. Huang,
 ``FinBERT: A pretrained language model for financial communications,''
 \emph{arXiv:2006.08097}, 2020.
 
-\bibitem{shah2023trillion}
+\bibitem[Shah et al.(2023)]{shah2023trillion}
 A. Shah, S. Paturi, and S. Chava,
 ``Trillion dollar words: A new financial dataset, task \& market
 analysis,'' in \emph{Proc. ACL}, 2023.
 
-\bibitem{malo2014good}
+\bibitem[Malo et al.(2014)]{malo2014good}
 P. Malo, A. Sinha, P. Korhonen, J. Wallenius, and P. Takala,
 ``Good debt or bad debt: Detecting semantic orientations in economic
 texts,'' \emph{J. Assoc. Inf. Sci. Technol.}, vol.~65, no.~4, pp.
 782--796, 2014.
 
-\bibitem{liu2019mt-dnn}
+\bibitem[Liu et al.(2019)]{liu2019mt-dnn}
 X. Liu, P. He, W. Chen, and J. Gao,
 ``Multi-task deep neural networks for natural language understanding,''
 in \emph{Proc. ACL}, 2019.

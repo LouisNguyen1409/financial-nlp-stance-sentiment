@@ -134,8 +134,8 @@
 % ---- Dataset overview table -------------------------------
 \begin{frame}{Dataset Overview}
     \centering
-    {\footnotesize
-    \begin{tabular}{@{}llcp{4.4cm}p{3.8cm}@{}}
+    \resizebox{\linewidth}{!}{%
+    \begin{tabular}{@{}llp{3.2cm}p{4.4cm}p{3.8cm}@{}}
         \toprule
         \textbf{Name} & \textbf{Sentences} & \textbf{Classes} & \textbf{Label distribution (test)} & \textbf{Notes} \\
         \midrule
@@ -148,14 +148,19 @@
             & 2{,}264 & 3 (negative / neutral / positive)
             & negative 61 (13.5\%) \newline neutral 278 (61.4\%) \newline positive 114 (25.2\%)
             & News headlines with 100\% annotator agreement. Highly neutral-skewed; negatives rare. \\
+        \addlinespace
+        Loughran--McDonald Lexicon~\cite{loughran2011liability}
+            & --- & rule-based \newline (pos / neg / uncertainty)
+            & pos $\approx$110 terms \newline neg $\approx$230 terms \newline uncertainty $\approx$90 terms
+            & Domain financial word lists; also includes hawkish ($\approx$40) and dovish ($\approx$50) monetary-policy lists. \\
         \bottomrule
-    \end{tabular}
+    \end{tabular}%
     }
 
     \vspace{0.6em}
     \begin{itemize}\setlength{\itemsep}{1pt}
         \item Short texts (mostly $< 40$ tokens) from the financial domain.
-        \item Both are \textbf{imbalanced}, both have \textbf{dominant neutral}, both are \textbf{small by modern NLP standards}.
+        \item FOMC and FPB are \textbf{imbalanced} with \textbf{dominant neutral}; LM Lexicon provides a domain-aware rule-based baseline and auxiliary features.
     \end{itemize}
 \end{frame}
 
@@ -576,7 +581,7 @@
 % ---- Deployment slide -------------------------------------
 \begin{frame}{Deployment --- CLI, Demo, and Hub Release}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
+        \begin{column}{0.50\textwidth}
             \textbf{Command-line interface}
             \begin{itemize}\setlength{\itemsep}{1pt}
                 \item \texttt{python cli.py --text "The Committee decided to raise the target range."}
@@ -592,16 +597,18 @@
                 \item Same checkpoint as the CLI --- reproducible.
             \end{itemize}
         \end{column}
-        \begin{column}{0.42\textwidth}
+        \begin{column}{0.47\textwidth}
             \textbf{HuggingFace Hub release}
 
             Five public model repos under the \texttt{Louisnguyen/} namespace:
             \begin{itemize}\setlength{\itemsep}{1pt}
+                {\scriptsize
                 \item \texttt{Louisnguyen/finbert-fomc-stance}
                 \item \texttt{Louisnguyen/finbert-fpb-sentiment}
                 \item \texttt{Louisnguyen/bert-llrd-fomc-stance}
                 \item \texttt{Louisnguyen/bert-llrd-fpb-sentiment}
                 \item \texttt{Louisnguyen/finbert-multitask-fomc-fpb}
+                }
             \end{itemize}
 
             \vspace{0.3em}

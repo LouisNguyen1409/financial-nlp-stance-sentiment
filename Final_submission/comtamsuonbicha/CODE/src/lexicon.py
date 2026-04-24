@@ -23,8 +23,6 @@ from src.evaluate import (
 # ──────────────────────────────────────────────────────────────────────────────
 # Loughran-McDonald word lists
 # ──────────────────────────────────────────────────────────────────────────────
-# Curated subsets from the Loughran-McDonald Master Dictionary (2011, updated 2023).
-# These are the most frequently occurring words in financial texts.
 
 LM_POSITIVE = {
     "achieve", "attain", "benefit", "bolster", "boom", "breakthrough", "compliment",
